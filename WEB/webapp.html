@@ -1,0 +1,2572 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+
+
+	<title>Calcladora Fetal </title>
+	
+
+	<script src="js/jquery-2.1.4.min.js"></script>	
+	
+	<script src="js/angular.js"></script>
+
+	<script src="js/functions.js"></script>
+
+
+		<script src="js/vis.min.js"></script>
+	
+
+ 	<script src="js/line-chart.min.js"></script>
+
+	<script src="js/ui-bootstrap-tpls-0.12.1.js"></script>
+
+		<script src="js/controllers.js"></script>
+
+
+
+
+		
+
+ 	<script src="js/highcharts-custom2.js"></script>
+
+
+			<script src="js/graficas.js"></script>
+	
+ 	<!-- <script src="prueba.js"></script> -->
+	
+	
+	
+
+
+
+	
+	
+	
+	
+	<style>.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+	.input-group-addon.primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(50, 118, 177);
+    border-color: rgb(40, 94, 142);
+}
+.input-group-addon.success {
+    color: rgb(255, 255, 255);
+    background-color: rgb(92, 184, 92);
+    border-color: rgb(76, 174, 76);
+}
+.input-group-addon.info {
+    color: rgb(255, 255, 255);
+    background-color: rgb(57, 179, 215);
+    border-color: rgb(38, 154, 188);
+}
+.input-group-addon.warning {
+    color: rgb(255, 255, 255);
+    background-color: rgb(240, 173, 78);
+    border-color: rgb(238, 162, 54);
+}
+.input-group-addon.danger {
+    color: rgb(255, 255, 255);
+    background-color: rgb(217, 83, 79);
+    border-color: rgb(212, 63, 58);
+	}
+
+	
+	</style>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+<div class="container-fluid">
+
+<!-- <div ><img src="images/logo_hgugm.gif" align="left"> 
+<img src="images/maternidad.jpg" align="center"> 
+<img src="images/lasuma.png" align="right">
+</div>  -->
+
+<!-- 
+<div>
+
+<img src="images/maternidad2.jpg" align="right">
+</div> -->
+
+
+<div class="row">
+<div class="col-md-12 col-lg-10 col-lg-offset-1">
+		
+
+		
+<div ng-app="appObstetricia">
+
+
+
+<div ng-controller="appCtrl">
+
+
+
+
+
+
+
+		<!-- <linechart data="data3" options="options3" mode="" width="" height="500"></linechart> -->
+
+
+
+<br />
+
+<div>
+
+<img src="images/HGUGM.png" align="center" height="80" width="420">
+<img src="images/seccion.jpg" align="left" height="172" width="148"> 
+ 
+<img src="images/fachada.png" align="right" height="120" width="420">
+<br /><br /><br />
+    <font color="#777">SERVICIO DE OBSTETRICIA Y GINECOLOGÍA</font>
+<br /><br /><br />
+	<h3><font color="#777"><b>CALCULADORA DE CRECIMIENTO FETAL</b></font></h3>
+	</div>
+	<br />
+	
+	
+
+	
+	
+	<div class="row">
+		<div class="col-md-6">
+			<div class="input-group">
+				<input type="text" class="form-control" 
+				datepicker-popup="d-M-yyyy" 
+				ng-model="fur" 
+				ng-change="set_ga1(); set_values();" 
+				is-open="opened_fur" 
+				datepicker-options="dateOptions" 
+				ng-required="true" min-date="minFur" max-date="fechaEco" close-text="Close" 
+				placeholder="FUR"
+				tooltip="Fecha de la última regla (dd-mm-aaaa)"
+				tooltip-placement="top"
+				tooltip-trigger="mouseenter"
+				tooltip-enable="!fur"/>
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="open_fur($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				<span class="input-group-addon" id="sizing-addon3"><i class="glyphicon glyphicon-chevron-right"></i></span>
+				<input type="text" class="form-control" 
+				datepicker-popup="d-M-yyyy" 
+				ng-model="fechaEco" 
+				ng-change="set_ga1(); set_values();" 
+				is-open="opened_fechaEco" 
+				datepicker-options="dateOptions" 
+				ng-required="true" min-date="fur" max-date="maxEco" close-text="Close" 
+				placeholder="F. Eco"
+				tooltip="Fecha de ecografía (dd-mm-aaaa)"
+				tooltip-placement="top"
+				tooltip-trigger="mouseenter"
+				tooltip-enable="!fechaEco"/>
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="open_fechaEco($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				<span class="input-group-addon" id="sizing-addon3"><i class="glyphicon glyphicon-chevron-right"></i></span>
+				<input type="text" class="form-control" 
+				datepicker-popup="d-M-yyyy" 
+				ng-model="fechaParto" 
+				datepicker-options="dateOptions" 
+				placeholder="F. Parto"
+				tooltip="Fecha posible de parto (dd-mm-aaaa)"
+				tooltip-placement="top"
+				tooltip-trigger="mouseenter"
+				tooltip-enable="!fechaParto"/>
+			</div><!-- /input-group -->
+		</div><!-- /.col-md-3 -->
+		
+		<div class="col-md-2">
+			<label class="btn btn-primary" ng-model="radioGa" ng-change="change_ga()" btn-radio="'real'" >({{ga1s}} semanas + {{ga1d}} días)</label>
+		</div>
+	</div><!-- /.row -->
+	
+	
+	
+	
+	
+	<br>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="input-group input-group-sm">
+				<!-- <span class="input-group-addon" id="sizing-addon3">s</span> -->
+				<input type="number" id="semanas" class="form-control" ng-model="semanas" ng-init=0 min=4 max=44 ng-change="set_ga2(); set_values();" placeholder="Semanas" aria-describedby="sizing-addon3">
+				<span class="input-group-addon" id="sizing-addon3"><i class="glyphicon glyphicon-plus"></i></span>
+				<input type="number" id="dias" class="form-control" ng-model="dias" ng-init=0 min=0 max=6 ng-change="set_ga2(); set_values();" placeholder="Días" aria-describedby="sizing-addon3">
+			</div><!-- /input-group -->
+		</div><!-- /.col-md-3 -->
+		<div class="col-md-2 col-md-offset-3" >
+        <label class="btn btn-primary" ng-model="radioGa" ng-change="change_ga()" btn-radio="'prueba'" >({{semanas}} semanas + {{dias}} días)</label>
+		</div>
+	</div><!-- /.row -->
+	
+	
+
+	
+		
+	
+
+
+	
+	<!-- 
+	<p>Edad gestacional: {{ga1s}} semanas y {{ga1d | number : 0}} dias. ({{ga1}} semanas)</p>
+ -->
+	
+	
+	
+
+
+
+
+<!-- 
+<p>Edad gestacional de prueba: ({{ga2}})</p>
+ -->
+ <br>
+
+
+	
+
+	
+
+	
+	
+	
+	
+
+<!--  
+<p>Edad gestacional por LCC: {{ga3s}} semanas y {{ga3d | number : 0}} dias. ({{ga3}} semanas)</p>
+ -->
+
+ <!-- 
+<div class="btn-group">
+        <label class="btn btn-primary" ng-model="radioGa" ng-change="change_ga()" btn-radio="'real'" >Edad gestacional por FUR ({{ga1s}}s {{ga1d}}d)</label>
+        <label class="btn btn-primary" ng-model="radioGa" ng-change="change_ga()" btn-radio="'prueba'" >Edad gestacional por semanas ({{semanas}}s {{dias}}d)</label>
+        <label class="btn btn-primary" ng-model="radioGa" ng-change="change_ga()" btn-radio="'crl'" >Edad gestacional por LCC  ({{ga3s}}s {{ga3d}}d)</label>
+</div>
+ -->
+
+<!--  <h4>Edad gestacional EN USO:</h4> {{ga}}  -->
+
+
+
+
+
+<hr>
+
+
+	<div ng-hide="!(ga>=4 && ga<45)" class="panel panel-grey-darker">
+		
+<div class="btn-group">
+
+ 
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'datacion'">Datación</label>
+
+
+		
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'biometrico'">Estudio Biométrico + Hemodinámico</label>
+		
+
+  		
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'hemodinamico'" >Estudio Hemodinámico</label>
+
+
+<label class="btn btn-default" ng-model="radioTabs" btn-radio="'huesos'" >Huesos largos</label>
+
+
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'lancet'">Lancet</label>
+	<!-- 	
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'cardiaco2'">Cardiaco</label>
+ -->
+		
+		
+		        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'crecimiento2'">Únicos vs múltiples</label>
+				
+				<label class="btn btn-default" ng-model="radioTabs" btn-radio="'riesgoPreeclampsia'">Riesgo de preeclampsia</label>
+				      
+
+<!-- 
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'biometrico'">Estudio Biométrico + Hemodinámico</label>
+        
+
+		<label class="btn btn-default" ng-model="radioTabs" btn-radio="'crecimiento'">Referencias de crecimiento</label>
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'paises'">Estudio por paises</label>
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'formulas'">Estudio Fórmulas</label>
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'cardiaco'" >Estudio Cardíaco</label>
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'anemia'">Anemia</label>
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'cervix'">Cérvix</label>
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'pasos'">Paso a paso</label> 
+  <label class="btn btn-default" ng-model="radioTabs" btn-radio="'gemelos'">Gemelos</label>
+        <label class="btn btn-default" ng-model="radioTabs" btn-radio="'referencias'">Referencias</label>
+		 -->
+		 
+</div>
+
+
+<div class="panel-body">	
+
+
+<div ng-hide="radioTabs!='crecimiento2'">
+<h4>Estudio de gestación múltiple</h4>
+		Edad gestacional en uso: {{gas}} semanas y {{gad | number : 0}} días.
+		<div class="row">
+
+		<div class="col-md-6">
+
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3">Peso</span>
+	<input type="number" class="form-control" placeholder="gr."
+	ng-model="pesoManual" min=250 max=6000
+	ng-change="set_pesos(); set_pesos_lancet(); set_per();" aria-describedby="sizing-addon3">
+
+		<span ng-if="!pesoManual" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="pesoManual" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+					<div class="input-group-btn">
+			<label class="btn btn-success" ng-model="radioSexo" ng-change="set_pesos(); set_pesos_lancet(); set_per()" btn-radio="'varon'">Varón</label>
+			<label class="btn btn-success" ng-model="radioSexo" ng-change="set_pesos(); set_pesos_lancet(); set_per()" btn-radio="'mujer'">Mujer</label>	
+<!-- 		</div>
+		<div class="input-btn-group"> -->
+			<label class="btn btn-info" ng-model="radioMultiple" ng-change="set_pesos(); set_pesos_lancet(); set_per()" btn-radio="'unico'" >Único</label>
+			<label class="btn btn-info" ng-model="radioMultiple" ng-change="set_pesos(); set_pesos_lancet(); set_per()" btn-radio="'doble'" >Gemelar</label>
+			<label class="btn btn-info" ng-model="radioMultiple" ng-change="set_pesos(); set_pesos_lancet(); set_per()" btn-radio="'triple'" >Triple</label>
+		</div>
+	</div>
+		
+
+		
+	
+		
+		
+		<small><em>Percentil de referencia Gregorio Marañón:<br> (p{{percentilReferenciaV2_M | number : 0}}) ({{pesoReferenciaV2_M | number : 0}}gr) ({{zscoreReferenciaV2_M | number : 3}}zs)</em></small>
+		<progressbar class="progress-striped active" value="zscoreReferenciaAbsV2_M" type="{{typeRefV2_M}}" max="2.6">p{{percentilReferenciaV2_M | number : 0}}</progressbar>
+		
+		
+		<div ng-show="radioMultiple!='triple'">
+		<small><em>Percentil de referencia Clinic Barcelona:<br> (p{{percentilReferencia_clinicV2_M | number : 0}}) ({{pesoReferencia_clinicV2_M | number : 0}}gr) ({{zscoreReferencia_clinicV2_M | number : 3}}zs)</em></small>
+		<progressbar class="progress-striped active" value="zscoreReferenciaAbs_clinicV2_M" type="{{type_clinicV2_M}}" max="2.6">p{{percentilReferencia_clinicV2_M | number : 0}}</progressbar>
+		</div>
+</div>
+
+</div>
+
+<div class="row">
+		<div class="col-md-5">
+<div id="containerBiometrico" style="height: 400px; width: 450px"></div><!-- <linechart data="data" options="options" mode="" width="" height="500"></linechart> -->
+		
+		
+	 	</div>
+
+
+
+		
+		<div class="col-md-5 col -md-offset-2">
+					<div id="containerGemelos" style="height: 400px; width: 450px"></div>
+	
+
+
+	 	</div>
+</div>
+		
+<div class="row">
+		<div class="col-md-12">
+					<div id="containerUnicoGemelar" style="height: 600px; width: 900px"></div>
+	
+
+
+	 	</div>
+</div>
+		
+		
+		
+		
+		
+</div>
+
+
+
+
+	<div ng-hide="radioTabs!='cardiaco2'">
+	
+	
+	
+	
+		<div class="row">
+		<div class="col-md-6">
+		
+			<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Diámetro Biparietal</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="bpd" min=31 max=100
+	ng-change="set_bpd(); set_pesos(); set_cardiaco2();" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_bpd | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_bpd | number : 0}}</span>
+	<span class="input-group-addon" id="sizing-addon3">{{resultado_bpd}}</span>	
+		<span ng-if="!bpd" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_bpd<10 || percentilPatologico_bpd>90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_bpd>=10 && percentilPatologico_bpd<=90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_bpd" type="{{type_bpd}}" max="2.6"></progressbar>
+
+	</div>
+
+		<div class="col-md-6">
+	
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Longitud del fémur</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="fl" min=17 max=75
+	ng-change="set_fl(); set_pesos(); set_cardiaco2();" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_fl | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_fl | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_fl}}</span>
+		<span ng-if="!fl" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_fl<10 || percentilPatologico_fl>90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_fl>=10 && percentilPatologico_fl<=90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_fl" type="{{type_fl}}" max="2.6"></progressbar>
+	
+	</div>
+	</div>
+	
+	
+				    <h4>Vasos:</h4>
+	<div class="row">
+		<div class="col-md-6">
+
+	
+			<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Pulmonary Valve</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="pulmonary_valve" min=0 max=100 step="0.1"
+	ng-change="set_pulmonary_valve();" aria-describedby="sizing-addon3">
+		<span ng-if="!pulmonary_valve" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		</div>
+		
+		<div class="row">		<div class="col-md-3">
+	<small>Por GA: <em>z={{zscore_pulmonary_valve_GA | number : 2}}  p={{percentil_pulmonary_valve_GA | number : 0}}</em></small>
+	</div>	<div class="col-md-9">
+	<progressbar class="progress-striped active" value="zscoreAbs_pulmonary_valve_GA" type="{{type_pulmonary_valve_GA}}" max="2.6"></progressbar>
+	</div>	</div>	
+
+	<div class="row">		<div class="col-md-3">
+<small>Por BPD: <em>z={{zscore_pulmonary_valve_BPD | number : 2}}  p={{percentil_pulmonary_valve_BPD | number : 0}}</em></small>
+</div>	<div class="col-md-9">
+		<progressbar class="progress-striped active" value="zscoreAbs_pulmonary_valve_BPD" type="{{type_pulmonary_valve_BPD}}" max="2.6"></progressbar>
+	</div>	</div>	
+	<div class="row">		<div class="col-md-3">
+		<small>Por FL: <em>z={{zscore_pulmonary_valve_FL | number : 2}}  p={{percentil_pulmonary_valve_FL | number : 0}}</em></small>
+</div>	<div class="col-md-9">
+		<progressbar class="progress-striped active" value="zscoreAbs_pulmonary_valve_FL" type="{{type_pulmonary_valve_FL}}" max="2.6"></progressbar>
+	</div>	</div>		
+	
+				<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Main Pulmonary Artery</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="main_pulmonary_artery" min=0 max=100 step="0.1"
+	ng-change="set_main_pulmonary_artery();" aria-describedby="sizing-addon3">
+		<span ng-if="!main_pulmonary_artery" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_main_pulmonary_artery_GA | number : 2}}  p={{percentil_main_pulmonary_artery_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_main_pulmonary_artery_GA" type="{{type_main_pulmonary_artery_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_main_pulmonary_artery_BPD | number : 2}}  p={{percentil_main_pulmonary_artery_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_main_pulmonary_artery_BPD" type="{{type_main_pulmonary_artery_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_main_pulmonary_artery_FL | number : 2}}  p={{percentil_main_pulmonary_artery_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_main_pulmonary_artery_FL" type="{{type_main_pulmonary_artery_FL}}" max="2.6"></progressbar>
+	
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Right Plmonary Artery</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="right_pulmonary_artery" min=0 max=100 step="0.1"
+	ng-change="set_right_pulmonary_artery();" aria-describedby="sizing-addon3">
+		<span ng-if="!right_pulmonary_artery" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_right_pulmonary_artery_GA | number : 2}}  p={{percentil_right_pulmonary_artery_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_pulmonary_artery_GA" type="{{type_right_pulmonary_artery_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_right_pulmonary_artery_BPD | number : 2}}  p={{percentil_right_pulmonary_artery_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_pulmonary_artery_BPD" type="{{type_right_pulmonary_artery_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_pulmonary_artery_FL | number : 2}}  p={{percentil_right_pulmonary_artery_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_pulmonary_artery_FL" type="{{type_right_pulmonary_artery_FL}}" max="2.6"></progressbar>
+
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Left Plmonary Artery</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="left_pulmonary_artery" min=0 max=100 step="0.1"
+	ng-change="set_left_pulmonary_artery();" aria-describedby="sizing-addon3">
+		<span ng-if="!left_pulmonary_artery" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		</div>
+<small>Por GA: <em>z={{zscore_left_pulmonary_artery_GA | number : 2}}  p={{percentil_left_pulmonary_artery_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_pulmonary_artery_GA" type="{{type_left_pulmonary_artery_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_left_pulmonary_artery_BPD | number : 2}}  p={{percentil_left_pulmonary_artery_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_pulmonary_artery_BPD" type="{{type_left_pulmonary_artery_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_left_pulmonary_artery_FL | number : 2}}  p={{percentil_left_pulmonary_artery_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_pulmonary_artery_FL" type="{{type_left_pulmonary_artery_FL}}" max="2.6"></progressbar>
+
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Arterial Duct</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="arterial_duct" min=0 max=100 step="0.1"
+	ng-change="set_arterial_duct();" aria-describedby="sizing-addon3">
+		<span ng-if="!arterial_duct" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_arterial_duct_GA | number : 2}}  p={{percentil_arterial_duct_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_arterial_duct_GA" type="{{type_arterial_duct_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_arterial_duct_BPD | number : 2}}  p={{percentil_arterial_duct_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_arterial_duct_BPD" type="{{type_arterial_duct_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_arterial_duct_FL | number : 2}}  p={{percentil_arterial_duct_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_arterial_duct_FL" type="{{type_arterial_duct_FL}}" max="2.6"></progressbar>
+
+	
+	
+		</div>
+		<div class="col-md-6">
+	
+			<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Aortic Valve</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="aortic_valve" min=0 max=100 step="0.1"
+	ng-change="set_aortic_valve();" aria-describedby="sizing-addon3">
+		<span ng-if="!aortic_valve" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_aortic_valve_GA | number : 2}}  p={{percentil_aortic_valve_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_aortic_valve_GA" type="{{type_aortic_valve_GA}}" max="2.6"></progressbar>
+	<small>Por BPD: </strong><em>z={{zscore_aortic_valve_BPD | number : 2}}  p={{percentil_aortic_valve_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_aortic_valve_BPD" type="{{type_aortic_valve_BPD}}" max="2.6"></progressbar>
+	<small>Por FL: <em>z={{zscore_aortic_valve_FL | number : 2}}  p={{percentil_aortic_valve_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_aortic_valve_FL" type="{{type_aortic_valve_FL}}" max="2.6"></progressbar>
+
+	
+			<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Ascending Aorta</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="ascending_aorta" min=0 max=100 step="0.1"
+	ng-change="set_ascending_aorta();" aria-describedby="sizing-addon3">
+		<span ng-if="!ascending_aorta" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+		<small>Por GA: <em>z={{zscore_ascending_aorta_GA | number : 2}}  p={{percentil_ascending_aorta_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_ascending_aorta_GA" type="{{type_ascending_aorta_GA}}" max="2.6"></progressbar>
+	<small>Por BPD: <em>z={{zscore_ascending_aorta_BPD | number : 2}}  p={{percentil_ascending_aorta_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_ascending_aorta_BPD" type="{{type_ascending_aorta_BPD}}" max="2.6"></progressbar>
+	<small>Por FL: <em>z={{zscore_ascending_aorta_FL | number : 2}}  p={{percentil_ascending_aorta_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_ascending_aorta_FL" type="{{type_ascending_aorta_FL}}" max="2.6"></progressbar>
+	
+	
+		</div>
+	</div>
+	
+	
+	
+			    <h4>3 Vessel Duct</h4>
+		<div class="row">
+		<div class="col-md-6">
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>3 Vessel Duct</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="three_vessel_duct" min=0 max=100 step="0.1"
+	ng-change="set_three_vessel_duct();" aria-describedby="sizing-addon3">
+		<span ng-if="!three_vessel_duct" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_three_vessel_duct_GA | number : 2}}  p={{percentil_three_vessel_duct_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_three_vessel_duct_GA" type="{{type_three_vessel_duct_GA}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_three_vessel_duct_FL | number : 2}}  p={{percentil_three_vessel_duct_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_three_vessel_duct_FL" type="{{type_three_vessel_duct_FL}}" max="2.6"></progressbar>
+
+	
+		</div>
+		
+		<div class="col-md-6">
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>3 Vessel Isthmus</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="three_vessel_isthmus" min=0 max=100 step="0.1"
+	ng-change="set_three_vessel_isthmus();" aria-describedby="sizing-addon3">
+		<span ng-if="!three_vessel_isthmus" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_three_vessel_isthmus_GA | number : 2}}  p={{percentil_three_vessel_isthmus_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_three_vessel_isthmus_GA" type="{{type_three_vessel_isthmus_GA}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_three_vessel_isthmus_FL | number : 2}}  p={{percentil_three_vessel_isthmus_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_three_vessel_isthmus_FL" type="{{type_three_vessel_isthmus_FL}}" max="2.6"></progressbar>
+
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Sagittal Isthmus</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="sagittal_isthmus" min=0 max=100 step="0.1"
+	ng-change="set_sagittal_isthmus();" aria-describedby="sizing-addon3">
+		<span ng-if="!sagittal_isthmus" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_sagittal_isthmus_GA | number : 2}}  p={{percentil_sagittal_isthmus_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_sagittal_isthmus_GA" type="{{type_sagittal_isthmus_GA}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_sagittal_isthmus_FL | number : 2}}  p={{percentil_sagittal_isthmus_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_sagittal_isthmus_FL" type="{{type_sagittal_isthmus_FL}}" max="2.6"></progressbar>
+	
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Descending Aorta</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="descending_aorta" min=0 max=100 step="0.1"
+	ng-change="set_descending_aorta();" aria-describedby="sizing-addon3">
+		<span ng-if="!descending_aorta" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_descending_aorta_GA | number : 2}}  p={{percentil_descending_aorta_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_descending_aorta_GA" type="{{type_descending_aorta_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_descending_aorta_BPD | number : 2}}  p={{percentil_descending_aorta_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_descending_aorta_BPD" type="{{type_descending_aorta_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_descending_aorta_FL | number : 2}}  p={{percentil_descending_aorta_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_descending_aorta_FL" type="{{type_descending_aorta_FL}}" max="2.6"></progressbar>
+	
+		</div>
+	</div>
+	
+	
+			    <h4>Ventriculos:</h4>
+		<div class="row">
+		<div class="col-md-6">
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Right Ventricle End-Diastolic Dimension</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="right_ventricle_end_diastolic_dimension" min=0 max=100 step="0.1"
+	ng-change="set_right_ventricle_end_diastolic_dimension();" aria-describedby="sizing-addon3">
+		<span ng-if="!right_ventricle_end_diastolic_dimension" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_right_ventricle_end_diastolic_dimension_GA | number : 2}}  p={{percentil_right_ventricle_end_diastolic_dimension_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_end_diastolic_dimension_GA" type="{{type_right_ventricle_end_diastolic_dimension_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_right_ventricle_end_diastolic_dimension_BPD | number : 2}}  p={{percentil_right_ventricle_end_diastolic_dimension_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_end_diastolic_dimension_BPD" type="{{type_right_ventricle_end_diastolic_dimension_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_ventricle_end_diastolic_dimension_FL | number : 2}}  p={{percentil_right_ventricle_end_diastolic_dimension_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_end_diastolic_dimension_FL" type="{{type_right_ventricle_end_diastolic_dimension_FL}}" max="2.6"></progressbar>
+
+
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Right Ventricle Inlet</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="right_ventricle_inlet" min=0 max=100 step="0.1"
+	ng-change="set_right_ventricle_inlet();" aria-describedby="sizing-addon3">
+		<span ng-if="!right_ventricle_inlet" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_right_ventricle_inlet_GA | number : 2}}  p={{percentil_right_ventricle_inlet_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_inlet_GA" type="{{type_right_ventricle_inlet_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_right_ventricle_inlet_BPD | number : 2}}  p={{percentil_right_ventricle_inlet_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_inlet_BPD" type="{{type_right_ventricle_inlet_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_ventricle_inlet_FL | number : 2}}  p={{percentil_right_ventricle_inlet_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_inlet_FL" type="{{type_right_ventricle_inlet_FL}}" max="2.6"></progressbar>
+
+
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Right Ventricle Area</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="right_ventricle_area" min=0 max=100 step="0.1"
+	ng-change="set_right_ventricle_area();" aria-describedby="sizing-addon3">
+		<span ng-if="!right_ventricle_area" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por FL: <em>z={{zscore_right_ventricle_area_GA | number : 2}}  p={{percentil_right_ventricle_area_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_area_GA" type="{{type_right_ventricle_area_GA}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_ventricle_area_BPD | number : 2}}  p={{percentil_right_ventricle_area_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_area_BPD" type="{{type_right_ventricle_area_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_ventricle_area_FL | number : 2}}  p={{percentil_right_ventricle_area_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_area_FL" type="{{type_right_ventricle_area_FL}}" max="2.6"></progressbar>
+
+
+
+	
+		</div>
+		<div class="col-md-6">
+	
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Left Ventricle End-Diastolic Dimension</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="left_ventricle_end_diastolic_dimension" min=0 max=100 step="0.1"
+	ng-change="set_left_ventricle_end_diastolic_dimension();" aria-describedby="sizing-addon3">
+		<span ng-if="!left_ventricle_end_diastolic_dimension" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_left_ventricle_end_diastolic_dimension_GA | number : 2}}  p={{percentil_left_ventricle_end_diastolic_dimension_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_end_diastolic_dimension_GA" type="{{type_left_ventricle_end_diastolic_dimension_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_left_ventricle_end_diastolic_dimension_BPD | number : 2}}  p={{percentil_left_ventricle_end_diastolic_dimension_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_end_diastolic_dimension_BPD" type="{{type_left_ventricle_end_diastolic_dimension_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_left_ventricle_end_diastolic_dimension_FL | number : 2}}  p={{percentil_left_ventricle_end_diastolic_dimension_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_end_diastolic_dimension_FL" type="{{type_left_ventricle_end_diastolic_dimension_FL}}" max="2.6"></progressbar>
+	
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Left Ventricle Inlet</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="left_ventricle_inlet" min=0 max=100 step="0.1"
+	ng-change="set_left_ventricle_inlet();" aria-describedby="sizing-addon3">
+		<span ng-if="!left_ventricle_inlet" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_left_ventricle_inlet_GA | number : 2}}  p={{percentil_left_ventricle_inlet_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_inlet_GA" type="{{type_left_ventricle_inlet_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_left_ventricle_inlet_BPD | number : 2}}  p={{percentil_left_ventricle_inlet_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_inlet_BPD" type="{{type_left_ventricle_inlet_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_left_ventricle_inlet_FL | number : 2}}  p={{percentil_left_ventricle_inlet_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_inlet_FL" type="{{type_left_ventricle_inlet_FL}}" max="2.6"></progressbar>
+	
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Left Ventricle Area</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="left_ventricle_area" min=0 max=100 step="0.1"
+	ng-change="set_left_ventricle_area();" aria-describedby="sizing-addon3">
+		<span ng-if="!left_ventricle_area" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_left_ventricle_area_GA | number : 2}}  p={{percentil_left_ventricle_area_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_area_GA" type="{{type_left_ventricle_area_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_left_ventricle_area_BPD | number : 2}}  p={{percentil_left_ventricle_area_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_area_BPD" type="{{type_left_ventricle_area_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_left_ventricle_area_FL | number : 2}}  p={{percentil_left_ventricle_area_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_area_FL" type="{{type_left_ventricle_area_FL}}" max="2.6"></progressbar>
+	
+		</div>
+	</div>
+	
+
+
+		    <h4>Valvulas atrioventriculares:</h4>
+		<div class="row">
+		<div class="col-md-6">
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Tricuspid Valve</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="tricuspid_valve" min=0 max=100 step="0.1"
+	ng-change="set_tricuspid_valve();" aria-describedby="sizing-addon3">
+		<span ng-if="!tricuspid_valve" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_tricuspid_valve_GA | number : 2}}  p={{percentil_tricuspid_valve_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_tricuspid_valve_GA" type="{{type_tricuspid_valve_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_tricuspid_valve_BPD | number : 2}}  p={{percentil_tricuspid_valve_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_tricuspid_valve_BPD" type="{{type_tricuspid_valve_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_tricuspid_valve_FL | number : 2}}  p={{percentil_tricuspid_valve_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_tricuspid_valve_FL" type="{{type_tricuspid_valve_FL}}" max="2.6"></progressbar>
+	
+		</div>
+		<div class="col-md-6">
+		
+			<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Mitral Valve</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="mitral_valve" min=0 max=100 step="0.1"
+	ng-change="set_mitral_valve();" aria-describedby="sizing-addon3">
+		<span ng-if="!mitral_valve" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_mitral_valve_GA | number : 2}}  p={{percentil_mitral_valve_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_mitral_valve_GA" type="{{type_mitral_valve_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_mitral_valve_BPD | number : 2}}  p={{percentil_mitral_valve_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_mitral_valve_BPD" type="{{type_mitral_valve_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_mitral_valve_FL | number : 2}}  p={{percentil_mitral_valve_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_mitral_valve_FL" type="{{type_mitral_valve_FL}}" max="2.6"></progressbar>
+
+	
+		</div>
+	</div>
+	
+
+
+		    <h4>Inferior vena cava:</h4>
+		<div class="row">
+		<div class="col-md-6">
+
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Inferior vena cava</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="inferior_vena_cava" min=0 max=100 step="0.1"
+	ng-change="set_inferior_vena_cava();" aria-describedby="sizing-addon3">
+		<span ng-if="!inferior_vena_cava" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_inferior_vena_cava_GA | number : 2}}  p={{percentil_inferior_vena_cava_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_inferior_vena_cava_GA" type="{{type_inferior_vena_cava_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_inferior_vena_cava_BPD | number : 2}}  p={{percentil_inferior_vena_cava_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_inferior_vena_cava_BPD" type="{{type_inferior_vena_cava_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_inferior_vena_cava_FL | number : 2}}  p={{percentil_inferior_vena_cava_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_inferior_vena_cava_FL" type="{{type_inferior_vena_cava_FL}}" max="2.6"></progressbar>
+	
+		</div>
+		<div class="col-md-6">
+	
+	
+		</div>
+	</div>
+		
+	
+	
+	
+	
+	
+	
+					    <h4>Versión anterior:</h4>
+			<div class="row">
+		<div class="col-md-6">
+		
+				    <h4>Outflow tracts</h4>
+		
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Aortic Valve</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="aortic_valve" min=0 max=100 step="0.1"
+	ng-change="set_aortic_valve();" aria-describedby="sizing-addon3">
+		<span ng-if="!aortic_valve" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_aortic_valve_GA | number : 2}}  p={{percentil_aortic_valve_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_aortic_valve_GA" type="{{type_aortic_valve_GA}}" max="2.6"></progressbar>
+	<small>Por BPD: </strong><em>z={{zscore_aortic_valve_BPD | number : 2}}  p={{percentil_aortic_valve_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_aortic_valve_BPD" type="{{type_aortic_valve_BPD}}" max="2.6"></progressbar>
+	<small>Por FL: <em>z={{zscore_aortic_valve_FL | number : 2}}  p={{percentil_aortic_valve_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_aortic_valve_FL" type="{{type_aortic_valve_FL}}" max="2.6"></progressbar>
+
+	
+	
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Pulmonary Valve</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="pulmonary_valve" min=0 max=100 step="0.1"
+	ng-change="set_pulmonary_valve();" aria-describedby="sizing-addon3">
+		<span ng-if="!pulmonary_valve" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_pulmonary_valve_GA | number : 2}}  p={{percentil_pulmonary_valve_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_pulmonary_valve_GA" type="{{type_pulmonary_valve_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_pulmonary_valve_BPD | number : 2}}  p={{percentil_pulmonary_valve_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_pulmonary_valve_BPD" type="{{type_pulmonary_valve_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_pulmonary_valve_FL | number : 2}}  p={{percentil_pulmonary_valve_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_pulmonary_valve_FL" type="{{type_pulmonary_valve_FL}}" max="2.6"></progressbar>
+
+	
+	
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Ascending Aorta</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="ascending_aorta" min=0 max=100 step="0.1"
+	ng-change="set_ascending_aorta();" aria-describedby="sizing-addon3">
+		<span ng-if="!ascending_aorta" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+		<small>Por GA: <em>z={{zscore_ascending_aorta_GA | number : 2}}  p={{percentil_ascending_aorta_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_ascending_aorta_GA" type="{{type_ascending_aorta_GA}}" max="2.6"></progressbar>
+	<small>Por BPD: <em>z={{zscore_ascending_aorta_BPD | number : 2}}  p={{percentil_ascending_aorta_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_ascending_aorta_BPD" type="{{type_ascending_aorta_BPD}}" max="2.6"></progressbar>
+	<small>Por FL: <em>z={{zscore_ascending_aorta_FL | number : 2}}  p={{percentil_ascending_aorta_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_ascending_aorta_FL" type="{{type_ascending_aorta_FL}}" max="2.6"></progressbar>
+	
+	
+	
+			<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Main Pulmonary Artery</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="main_pulmonary_artery" min=0 max=100 step="0.1"
+	ng-change="set_main_pulmonary_artery();" aria-describedby="sizing-addon3">
+		<span ng-if="!main_pulmonary_artery" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_main_pulmonary_artery_GA | number : 2}}  p={{percentil_main_pulmonary_artery_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_main_pulmonary_artery_GA" type="{{type_main_pulmonary_artery_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_main_pulmonary_artery_BPD | number : 2}}  p={{percentil_main_pulmonary_artery_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_main_pulmonary_artery_BPD" type="{{type_main_pulmonary_artery_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_main_pulmonary_artery_FL | number : 2}}  p={{percentil_main_pulmonary_artery_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_main_pulmonary_artery_FL" type="{{type_main_pulmonary_artery_FL}}" max="2.6"></progressbar>
+	
+
+	
+	</div>
+	
+	<div class="col-md-6">
+		
+				    <h4>Atrioventricular Valves</h4>
+		
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Tricuspid Valve</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="tricuspid_valve" min=0 max=100 step="0.1"
+	ng-change="set_tricuspid_valve();" aria-describedby="sizing-addon3">
+		<span ng-if="!tricuspid_valve" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_tricuspid_valve_GA | number : 2}}  p={{percentil_tricuspid_valve_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_tricuspid_valve_GA" type="{{type_tricuspid_valve_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_tricuspid_valve_BPD | number : 2}}  p={{percentil_tricuspid_valve_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_tricuspid_valve_BPD" type="{{type_tricuspid_valve_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_tricuspid_valve_FL | number : 2}}  p={{percentil_tricuspid_valve_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_tricuspid_valve_FL" type="{{type_tricuspid_valve_FL}}" max="2.6"></progressbar>
+
+	
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Mitral Valve</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="mitral_valve" min=0 max=100 step="0.1"
+	ng-change="set_mitral_valve();" aria-describedby="sizing-addon3">
+		<span ng-if="!mitral_valve" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_mitral_valve_GA | number : 2}}  p={{percentil_mitral_valve_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_mitral_valve_GA" type="{{type_mitral_valve_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_mitral_valve_BPD | number : 2}}  p={{percentil_mitral_valve_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_mitral_valve_BPD" type="{{type_mitral_valve_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_mitral_valve_FL | number : 2}}  p={{percentil_mitral_valve_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_mitral_valve_FL" type="{{type_mitral_valve_FL}}" max="2.6"></progressbar>
+
+	
+	</div>
+	
+	
+	</div>
+	
+	
+			<div class="row">
+		<div class="col-md-6">
+		
+				    <h4>Ventricles</h4>
+		
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Right Ventricle End-Diastolic Dimension</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="right_ventricle_end_diastolic_dimension" min=0 max=100 step="0.1"
+	ng-change="set_right_ventricle_end_diastolic_dimension();" aria-describedby="sizing-addon3">
+		<span ng-if="!right_ventricle_end_diastolic_dimension" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_right_ventricle_end_diastolic_dimension_GA | number : 2}}  p={{percentil_right_ventricle_end_diastolic_dimension_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_end_diastolic_dimension_GA" type="{{type_right_ventricle_end_diastolic_dimension_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_right_ventricle_end_diastolic_dimension_BPD | number : 2}}  p={{percentil_right_ventricle_end_diastolic_dimension_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_end_diastolic_dimension_BPD" type="{{type_right_ventricle_end_diastolic_dimension_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_ventricle_end_diastolic_dimension_FL | number : 2}}  p={{percentil_right_ventricle_end_diastolic_dimension_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_end_diastolic_dimension_FL" type="{{type_right_ventricle_end_diastolic_dimension_FL}}" max="2.6"></progressbar>
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Left Ventricle End-Diastolic Dimension</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="left_ventricle_end_diastolic_dimension" min=0 max=100 step="0.1"
+	ng-change="set_left_ventricle_end_diastolic_dimension();" aria-describedby="sizing-addon3">
+		<span ng-if="!left_ventricle_end_diastolic_dimension" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_left_ventricle_end_diastolic_dimension_GA | number : 2}}  p={{percentil_left_ventricle_end_diastolic_dimension_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_end_diastolic_dimension_GA" type="{{type_left_ventricle_end_diastolic_dimension_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_left_ventricle_end_diastolic_dimension_BPD | number : 2}}  p={{percentil_left_ventricle_end_diastolic_dimension_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_end_diastolic_dimension_BPD" type="{{type_left_ventricle_end_diastolic_dimension_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_left_ventricle_end_diastolic_dimension_FL | number : 2}}  p={{percentil_left_ventricle_end_diastolic_dimension_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_end_diastolic_dimension_FL" type="{{type_left_ventricle_end_diastolic_dimension_FL}}" max="2.6"></progressbar>
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Right Ventricle Inlet</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="right_ventricle_inlet" min=0 max=100 step="0.1"
+	ng-change="set_right_ventricle_inlet();" aria-describedby="sizing-addon3">
+		<span ng-if="!right_ventricle_inlet" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_right_ventricle_inlet_GA | number : 2}}  p={{percentil_right_ventricle_inlet_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_inlet_GA" type="{{type_right_ventricle_inlet_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_right_ventricle_inlet_BPD | number : 2}}  p={{percentil_right_ventricle_inlet_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_inlet_BPD" type="{{type_right_ventricle_inlet_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_ventricle_inlet_FL | number : 2}}  p={{percentil_right_ventricle_inlet_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_inlet_FL" type="{{type_right_ventricle_inlet_FL}}" max="2.6"></progressbar>
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Left Ventricle Inlet</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="left_ventricle_inlet" min=0 max=100 step="0.1"
+	ng-change="set_left_ventricle_inlet();" aria-describedby="sizing-addon3">
+		<span ng-if="!left_ventricle_inlet" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_left_ventricle_inlet_GA | number : 2}}  p={{percentil_left_ventricle_inlet_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_inlet_GA" type="{{type_left_ventricle_inlet_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_left_ventricle_inlet_BPD | number : 2}}  p={{percentil_left_ventricle_inlet_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_inlet_BPD" type="{{type_left_ventricle_inlet_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_left_ventricle_inlet_FL | number : 2}}  p={{percentil_left_ventricle_inlet_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_inlet_FL" type="{{type_left_ventricle_inlet_FL}}" max="2.6"></progressbar>
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Right Ventricle Area</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="right_ventricle_area" min=0 max=100 step="0.1"
+	ng-change="set_right_ventricle_area();" aria-describedby="sizing-addon3">
+		<span ng-if="!right_ventricle_area" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por FL: <em>z={{zscore_right_ventricle_area_GA | number : 2}}  p={{percentil_right_ventricle_area_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_area_GA" type="{{type_right_ventricle_area_GA}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_ventricle_area_BPD | number : 2}}  p={{percentil_right_ventricle_area_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_area_BPD" type="{{type_right_ventricle_area_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_ventricle_area_FL | number : 2}}  p={{percentil_right_ventricle_area_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_ventricle_area_FL" type="{{type_right_ventricle_area_FL}}" max="2.6"></progressbar>
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Left Ventricle Area</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="left_ventricle_area" min=0 max=100 step="0.1"
+	ng-change="set_left_ventricle_area();" aria-describedby="sizing-addon3">
+		<span ng-if="!left_ventricle_area" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_left_ventricle_area_GA | number : 2}}  p={{percentil_left_ventricle_area_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_area_GA" type="{{type_left_ventricle_area_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_left_ventricle_area_BPD | number : 2}}  p={{percentil_left_ventricle_area_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_area_BPD" type="{{type_left_ventricle_area_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_left_ventricle_area_FL | number : 2}}  p={{percentil_left_ventricle_area_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_ventricle_area_FL" type="{{type_left_ventricle_area_FL}}" max="2.6"></progressbar>
+
+	
+	
+	</div>
+	
+	
+	
+	<div class="col-md-6">
+		
+				    <h4>Other Vessels</h4>
+		
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Descending Aorta</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="descending_aorta" min=0 max=100 step="0.1"
+	ng-change="set_descending_aorta();" aria-describedby="sizing-addon3">
+		<span ng-if="!descending_aorta" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+	<small>Por GA: <em>z={{zscore_descending_aorta_GA | number : 2}}  p={{percentil_descending_aorta_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_descending_aorta_GA" type="{{type_descending_aorta_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_descending_aorta_BPD | number : 2}}  p={{percentil_descending_aorta_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_descending_aorta_BPD" type="{{type_descending_aorta_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_descending_aorta_FL | number : 2}}  p={{percentil_descending_aorta_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_descending_aorta_FL" type="{{type_descending_aorta_FL}}" max="2.6"></progressbar>
+
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Descending Aorta</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="inferior_vena_cava" min=0 max=100 step="0.1"
+	ng-change="set_inferior_vena_cava();" aria-describedby="sizing-addon3">
+		<span ng-if="!inferior_vena_cava" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_inferior_vena_cava_GA | number : 2}}  p={{percentil_inferior_vena_cava_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_inferior_vena_cava_GA" type="{{type_inferior_vena_cava_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_inferior_vena_cava_BPD | number : 2}}  p={{percentil_inferior_vena_cava_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_inferior_vena_cava_BPD" type="{{type_inferior_vena_cava_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_inferior_vena_cava_FL | number : 2}}  p={{percentil_inferior_vena_cava_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_inferior_vena_cava_FL" type="{{type_inferior_vena_cava_FL}}" max="2.6"></progressbar>
+
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Right Plmonary Artery</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="right_pulmonary_artery" min=0 max=100 step="0.1"
+	ng-change="set_right_pulmonary_artery();" aria-describedby="sizing-addon3">
+		<span ng-if="!right_pulmonary_artery" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_right_pulmonary_artery_GA | number : 2}}  p={{percentil_right_pulmonary_artery_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_pulmonary_artery_GA" type="{{type_right_pulmonary_artery_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_right_pulmonary_artery_BPD | number : 2}}  p={{percentil_right_pulmonary_artery_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_pulmonary_artery_BPD" type="{{type_right_pulmonary_artery_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_right_pulmonary_artery_FL | number : 2}}  p={{percentil_right_pulmonary_artery_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_right_pulmonary_artery_FL" type="{{type_right_pulmonary_artery_FL}}" max="2.6"></progressbar>
+
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Left Plmonary Artery</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="left_pulmonary_artery" min=0 max=100 step="0.1"
+	ng-change="set_left_pulmonary_artery();" aria-describedby="sizing-addon3">
+		<span ng-if="!left_pulmonary_artery" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		</div>
+<small>Por GA: <em>z={{zscore_left_pulmonary_artery_GA | number : 2}}  p={{percentil_left_pulmonary_artery_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_pulmonary_artery_GA" type="{{type_left_pulmonary_artery_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_left_pulmonary_artery_BPD | number : 2}}  p={{percentil_left_pulmonary_artery_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_pulmonary_artery_BPD" type="{{type_left_pulmonary_artery_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_left_pulmonary_artery_FL | number : 2}}  p={{percentil_left_pulmonary_artery_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_left_pulmonary_artery_FL" type="{{type_left_pulmonary_artery_FL}}" max="2.6"></progressbar>
+
+
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Arterial Duct</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="arterial_duct" min=0 max=100 step="0.1"
+	ng-change="set_arterial_duct();" aria-describedby="sizing-addon3">
+		<span ng-if="!arterial_duct" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_arterial_duct_GA | number : 2}}  p={{percentil_arterial_duct_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_arterial_duct_GA" type="{{type_arterial_duct_GA}}" max="2.6"></progressbar>
+<small>Por BPD: <em>z={{zscore_arterial_duct_BPD | number : 2}}  p={{percentil_arterial_duct_BPD | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_arterial_duct_BPD" type="{{type_arterial_duct_BPD}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_arterial_duct_FL | number : 2}}  p={{percentil_arterial_duct_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_arterial_duct_FL" type="{{type_arterial_duct_FL}}" max="2.6"></progressbar>
+
+	
+	</div>
+	
+	<div class="col-md-6">
+		
+				    <h4>Other Other Vessels</h4>
+		
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>3 Vessel Isthmus</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="three_vessel_isthmus" min=0 max=100 step="0.1"
+	ng-change="set_three_vessel_isthmus();" aria-describedby="sizing-addon3">
+		<span ng-if="!three_vessel_isthmus" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_three_vessel_isthmus_GA | number : 2}}  p={{percentil_three_vessel_isthmus_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_three_vessel_isthmus_GA" type="{{type_three_vessel_isthmus_GA}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_three_vessel_isthmus_FL | number : 2}}  p={{percentil_three_vessel_isthmus_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_three_vessel_isthmus_FL" type="{{type_three_vessel_isthmus_FL}}" max="2.6"></progressbar>
+
+		
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>Sagittal Isthmus</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="sagittal_isthmus" min=0 max=100 step="0.1"
+	ng-change="set_sagittal_isthmus();" aria-describedby="sizing-addon3">
+		<span ng-if="!sagittal_isthmus" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_sagittal_isthmus_GA | number : 2}}  p={{percentil_sagittal_isthmus_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_sagittal_isthmus_GA" type="{{type_sagittal_isthmus_GA}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_sagittal_isthmus_FL | number : 2}}  p={{percentil_sagittal_isthmus_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_sagittal_isthmus_FL" type="{{type_sagittal_isthmus_FL}}" max="2.6"></progressbar>
+
+		
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon2"><b>3 Vessel Duct</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="three_vessel_duct" min=0 max=100 step="0.1"
+	ng-change="set_three_vessel_duct();" aria-describedby="sizing-addon3">
+		<span ng-if="!three_vessel_duct" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<small>Por GA: <em>z={{zscore_three_vessel_duct_GA | number : 2}}  p={{percentil_three_vessel_duct_GA | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_three_vessel_duct_GA" type="{{type_three_vessel_duct_GA}}" max="2.6"></progressbar>
+<small>Por FL: <em>z={{zscore_three_vessel_duct_FL | number : 2}}  p={{percentil_three_vessel_duct_FL | number : 0}}</em></small>
+	<progressbar class="progress-striped active" value="zscoreAbs_three_vessel_duct_FL" type="{{type_three_vessel_duct_FL}}" max="2.6"></progressbar>
+
+	
+	
+	</div>
+	
+	
+	
+	</div>
+		
+	
+	
+	
+	
+	
+	<!-- <div id="visualization"></div> -->
+<!-- <script type="text/javascript"> -->
+    <!-- // Create and populate a data table. -->
+    <!-- var data = new vis.DataSet(); -->
+    <!-- // create some nice looking data with sin/cos -->
+    <!-- var counter = 0; -->
+    <!-- var steps = 50;  // number of datapoints will be steps*steps -->
+    <!-- var axisMax = 314; -->
+    <!-- var axisStep = axisMax / steps; -->
+    <!-- for (var x = 0; x < axisMax; x+=axisStep) { -->
+        <!-- for (var y = 0; y < axisMax; y+=axisStep) { -->
+            <!-- var value = (Math.sin(x/50) * Math.cos(y/50) * 50 + 50); -->
+            <!-- data.add({id:counter++,x:x,y:y,z:value,style:value}); -->
+        <!-- } -->
+    <!-- } -->
+
+    <!-- // specify options -->
+    <!-- var options = { -->
+        <!-- width:  '500px', -->
+        <!-- height: '552px', -->
+        <!-- style: 'surface', -->
+        <!-- showPerspective: true, -->
+        <!-- showGrid: true, -->
+        <!-- showShadow: false, -->
+        <!-- keepAspectRatio: true, -->
+        <!-- verticalRatio: 0.5, -->
+		<!-- xLabel: 'EG', -->
+		<!-- yLabel: 'DBP', -->
+		<!-- zLabel: 'Válvula Aortica' -->
+    <!-- }; -->
+
+    <!-- // Instantiate our graph object. -->
+    <!-- var container = document.getElementById('visualization'); -->
+    <!-- var graph3d = new vis.Graph3d(container, data, options); -->
+<!-- </script> -->
+	
+	
+	
+	</div>
+
+
+	
+
+	<div ng-hide="radioTabs!='datacion'">
+	<h4>Datación por biometría</h4>
+Edad gestacional en uso: {{gas}} semanas y {{gad | number : 0}} días.
+	 	<div class="row">
+		<div class="col-md-3">
+			<div class="input-group input-group-sm">
+				<span class="input-group-addon" id="sizing-addon3">LCC:</span>
+					<input type="number" class="form-control" ng-model="crl_edad" min=2 max=121 ng-change="set_ga3();" placeholder="mm.">
+					<span ng-if="!crl_edad" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="crl_edad" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-sm btn-success" ng-click="set_FUR_CRL()">Corregir FUR</button>
+					</span>
+			</div><!-- /input-group -->
+		</div><!-- /.col-md-3 -->
+		<div class="col-md-2 col-md-offset-3" >
+<label class="btn btn-primary" ng-model="radioGa" ng-change="change_ga()" btn-radio="'crl'" >({{ga3s}} semanas + {{ga3d}} días)</label>
+	</div>
+		</div>
+		
+		<br>
+
+	
+	 	<div class="row">
+	<div class="col-md-3">
+			<div class="input-group input-group-sm">
+				<span class="input-group-addon" id="sizing-addon3">DBP:</span>
+					<input type="number" class="form-control" ng-model="bpd_edad" min=31 max=100 ng-change="set_ga4();" placeholder="mm.">
+					<span ng-if="!bpd_edad" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="bpd_edad" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-sm btn-success" ng-click="set_FUR_BPD()">Corregir FUR</button>
+					</span>
+			</div><!-- /input-group -->
+		</div><!-- /.col-md-3 -->
+			<div class="col-md-2 col-md-offset-3">
+<label class="btn btn-primary" ng-model="radioGa" ng-change="change_ga()" btn-radio="'bpd'" >({{ga4s}} semanas + {{ga4d}} días)</label>
+	</div>
+	</div>
+		
+				<br>
+		
+ 	<div class="row">
+	<div class="col-md-3">
+			<div class="input-group input-group-sm">
+				<span class="input-group-addon" id="sizing-addon3">LF:</span>
+					<input type="number" class="form-control" ng-model="fl_edad" min=17 max=75 ng-change="set_ga5();" placeholder="mm.">
+					<span ng-if="!fl_edad" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="fl_edad" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-sm btn-success" ng-click="set_FUR_FL()">Corregir FUR</button>
+					</span>
+			</div><!-- /input-group -->
+		</div><!-- /.col-md-3 -->
+			<div class="col-md-2 col-md-offset-3">
+<label class="btn btn-primary" ng-model="radioGa" ng-change="change_ga()" btn-radio="'fl'" >({{ga5s}} semanas + {{ga5d}} días)</label>
+	</div>
+	</div>
+	
+	</div>
+
+
+	
+		<div ng-hide="radioTabs!='lancet'"> 	
+	<h4>Estudio multicentro</h4>
+	 Edad gestacional en uso: {{gas}} semanas y {{gad | number : 0}} días.
+	 
+	 
+		 	 	<div class="row">
+		<div class="col-md-4">
+	
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3">Peso</span>
+	<input type="number" class="form-control" placeholder="gr."
+	ng-model="pesoManual" min=250 max=6000
+	ng-change="set_pesos(); set_pesos_lancet(); set_per();" aria-describedby="sizing-addon3">
+
+		<span ng-if="!pesoManual" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="pesoManual" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+					<div class="input-group-btn">
+			<label class="btn btn-success" ng-model="radioSexo" ng-change="set_pesos_lancet()" btn-radio="'varon'">Varón</label>
+			<label class="btn btn-success" ng-model="radioSexo" ng-change="set_pesos_lancet()" btn-radio="'mujer'">Mujer</label>	
+		</div>
+	</div>
+	
+	</div>
+	
+	
+	<!-- <div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3">Peso</span>
+	<input type="number" class="form-control" placeholder="gr."
+	ng-model="pesoManual" min=250 max=6000
+	ng-change="set_pesos(); set_pesos_lancet();" aria-describedby="sizing-addon3">
+
+		<span ng-if="!pesoManual" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="pesoManual" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+												<div class="input-group-btn">
+			<label class="btn btn-success" ng-model="radioSexo" ng-change="set_pesos_lancet()" btn-radio="'varon'">Varón</label>
+			<label class="btn btn-success" ng-model="radioSexo" ng-change="set_pesos_lancet()" btn-radio="'mujer'">Mujer</label>	
+		</div>
+	</div> -->
+		
+	
+	
+	</div>
+	
+	
+			 	 	<div class="row">
+		<div class="col-md-6">
+	
+	<small><strong>Lancet Gregorio Marañón</strong><em> (p{{percentilReferencia | number : 0}}) ({{pesoReferencia | number : 0}}gr ({{zscoreReferencia | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscoreReferenciaAbs" type="{{typeRef}}" max="2.6">p{{percentilReferencia | number : 0}}</progressbar>
+
+	<small><em>Percentil de referencia Gregorio Marañón:<br> (p{{percentilReferenciaV2 | number : 0}}) ({{pesoReferenciaV2 | number : 0}}gr) ({{zscoreReferenciaV2 | number : 3}}zs)</em></small>
+		<progressbar class="progress-striped active" value="zscoreReferenciaAbsV2" type="{{typeRefV2}}" max="2.6">p{{percentilReferenciaV2 | number : 0}}</progressbar>
+		
+		
+		<small><em>Percentil de referencia Clinic Barcelona:<br> (p{{percentilReferencia_clinicV2 | number : 0}}) ({{pesoReferencia_clinicV2 | number : 0}}gr) ({{zscoreReferencia_clinicV2 | number : 3}}zs)</em></small>
+		<progressbar class="progress-striped active" value="zscoreReferenciaAbs_clinicV2" type="{{type_clinicV2}}" max="2.6">p{{percentilReferencia_clinicV2 | number : 0}}</progressbar>
+	
+	
+		<small><strong>Lancet Talavera</strong><em> (p{{percentilTalavera | number : 0}}) ({{pesoTalavera | number : 0}}gr ({{zscoreTalavera | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscoreTalaveraAbs" type="{{typeTalavera}}" max="2.6">p{{percentilTalavera | number : 0}}</progressbar>
+
+
+		<small><strong>Lancet Fuenlabrada</strong><em> (p{{percentilFuenlabrada | number : 0}}) ({{pesoFuenlabrada | number : 0}}gr ({{zscoreFuenlabrada | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscoreFuenlabradaAbs" type="{{typeFuenlabrada}}" max="2.6">p{{percentilFuenlabrada | number : 0}}</progressbar>
+
+	
+		<small><strong>Lancet Alcázar de San Juan</strong><em> (p{{percentilManchaCentro | number : 0}}) ({{pesoManchaCentro | number : 0}}gr ({{zscoreManchaCentro | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscoreManchaCentroAbs" type="{{typeManchaCentro}}" max="2.6">p{{percentilManchaCentro | number : 0}}</progressbar>
+
+	</div>
+	
+	<div class="col-md-6">
+	<div id="containerLancet" style="height: 600px"></div>
+		
+	</div>
+	</div>
+<!-- 	
+<small><em>Percentil para variables de categorias distintas al valor de referencia (sexo, raza, patologias):<br> (p{{percentilPatologico | number : 0}}) ({{pesoPatologico | number : 0}}gr) ({{zscorePatologico | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs" type="{{type}}" max="2.6">p{{percentilPatologico | number : 0}}<i ng-show="showWarning"> Percentil de riesgo!</i></progressbar>
+
+	
+	
+<small><em>Percentil del Clinic:<br> (p{{percentilReferencia_clinic | number : 0}}) ({{pesoReferencia_clinic | number : 0}}gr) ({{zscoreReferencia_clinic | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscoreReferenciaAbs_clinic" type="{{type_clinic}}" max="2.6">p{{percentilReferencia_clinic | number : 0}}<i ng-show="showWarning_clinic"> Percentil de riesgo!</i></progressbar>
+
+	
+	
+			<small><em> V2  Percentil de referencia para feto femenino y gestante caucásica sin patologias:<br> (p{{percentilReferenciaV2 | number : 0}}) ({{pesoReferenciaV2 | number : 0}}gr) ({{zscoreReferenciaV2 | number : 3}}zs)</em></small>
+		<progressbar class="progress-striped active" value="zscoreReferenciaAbsV2" type="{{typeRefV2}}" max="2.6">p{{percentilReferenciaV2 | number : 0}}<i ng-show="showWarningRefV2"> Percentil de riesgo!</i></progressbar>
+	
+ -->	
+
+
+
+
+
+
+	</div>
+
+
+
+
+
+	<div ng-hide="radioTabs!='biometrico'">
+	
+<!-- 
+Edad gestacional en uso: {{gas}} semanas y {{gad | number : 0}} dias.
+ -->
+<!-- 
+<p>Peso: <input type="number" ng-model="peso" ng-init=0 min=250 max=6000 ng-change="set_per(); set_pesos_lancet();"></p>
+ -->
+ 
+<!-- <div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3">Peso</span>
+	<input type="number" class="form-control" placeholder="gr."
+	ng-model="peso" min=250 max=6000
+	ng-change=" set_pesos_lancet(); set_per();" aria-describedby="sizing-addon3">
+
+		<span ng-if="!peso" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="peso" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	
+	</div> -->
+	
+	
+	
+		    <h4>Estudio Biométrico</h4>
+Edad gestacional en uso: {{gas}} semanas y {{gad | number : 0}} días.
+ 	 	<div class="row">
+<!-- 		<div class="col-md-4">
+
+
+
+
+	</div> -->
+	
+	
+
+		<div class="col-md-6">
+		
+
+		
+			<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Diámetro Biparietal</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="bpd" min=31 max=100
+	ng-change="set_bpd(); set_pesos();" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_bpd | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_bpd | number : 0}}</span>
+	<span class="input-group-addon" id="sizing-addon3">{{resultado_bpd}}</span>	
+		<span ng-if="!bpd" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_bpd<=10 || percentilPatologico_bpd>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_bpd>10 && percentilPatologico_bpd<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_bpd" type="{{type_bpd}}" max="2.6"></progressbar>
+
+			
+			
+			
+			<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Circunferencia Craneal</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="hc" min=110 max=342
+	ng-change="set_hc(); set_pesos();" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_hc | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_hc | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_hc}}</span>
+		<span ng-if="!hc" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_hc<=10 || percentilPatologico_hc>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_hc>10 && percentilPatologico_hc<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+			
+
+<progressbar class="progress-striped active" value="zscorePatologicoAbs_hc" type="{{type_hc}}" max="2.6"></progressbar>
+
+					<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Circunferencia Abdominal</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="ac" min=90 max=350
+	ng-change="set_ac(); set_pesos();" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_ac | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_ac | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_ac}}</span>
+		<span ng-if="!ac" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_ac<=10 || percentilPatologico_ac>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_ac>10 && percentilPatologico_ac<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+<progressbar class="progress-striped active" value="zscorePatologicoAbs_ac" type="{{type_ac}}" max="2.6"></progressbar>
+
+
+
+
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Longitud del fémur</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="fl" min=17 max=75
+	ng-change="set_fl(); set_pesos();" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_fl | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_fl | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_fl}}</span>
+		<span ng-if="!fl" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_fl<=10 || percentilPatologico_fl>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_fl>10 && percentilPatologico_fl<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_fl" type="{{type_fl}}" max="2.6"></progressbar>
+	
+	
+
+
+
+
+		</div>
+		
+
+		
+		
+		
+	
+
+		
+
+
+	<div class="col-md-6">
+		
+
+	
+	
+	
+	<table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Formula</th>
+        <th>Medidas</th>
+        <th>Peso</th>
+		<th>Edad</th>
+      </tr>
+    </thead>
+    <tbody>
+<!--       <tr>
+        <th><label class="btn btn-primary" ng-model="radioFormulas" ng-change="set_pesos()" btn-radio="'Hadlock1'">Hadlock 1</label></th>
+        <th>CA LF</th>
+        <th>{{resultado_Hadlock1_peso}}</th>
+		<th>{{resultado_Hadlock1_edad}}</th>
+      </tr>
+     
+	  <tr>
+        <th><label class="btn btn-primary" ng-model="radioFormulas" ng-change="set_pesos()" btn-radio="'Shepard'">Shepard</label></th>
+        <th>DBP CA</th>
+        <th>{{resultado_Shepard_peso}}</th>
+		<th>{{resultado_Shepard_edad}}</th>
+      </tr> -->
+		
+		<tr>
+        <th><label class="btn btn-primary" ng-model="radioFormulas" ng-change="set_pesos()" btn-radio="'Hadlock2'">Hadlock 2</label></th>
+        <th>CC CA LF</th>
+        <th>{{resultado_Hadlock2_peso}}</th>
+		<th>{{resultado_Hadlock2_edad}}</th>
+		</tr>
+		<tr>
+        <th><label class="btn btn-primary" ng-model="radioFormulas" ng-change="set_pesos()" btn-radio="'Hadlock3'">Hadlock 3</label></th>
+        <th>DBP CA LF</th>
+        <th>{{resultado_Hadlock3_peso}}</th>
+		<th>{{resultado_Hadlock3_edad}}</th>
+      </tr>
+		
+	  	  <tr>
+        <th><label class="btn btn-primary" ng-model="radioFormulas" ng-change="set_pesos()" btn-radio="'manual'">Peso manual</label></th>
+       <th><div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3">Peso</span>
+	<input type="number" class="form-control" placeholder="gr."
+	ng-model="pesoManual" min=250 max=6000
+	ng-change="set_pesos(); set_pesos_lancet();" aria-describedby="sizing-addon3">
+
+		<span ng-if="!pesoManual" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="pesoManual" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+												<div class="input-group-btn">
+			<label class="btn btn-success" ng-model="radioSexo" ng-change="set_pesos_lancet()" btn-radio="'varon'">Varón</label>
+			<label class="btn btn-success" ng-model="radioSexo" ng-change="set_pesos_lancet()" btn-radio="'mujer'">Mujer</label>	
+		</div>
+	</div></th>
+
+      </tr>
+	</tbody>
+  </table>
+	
+	
+	
+			<!-- 
+	<div class="input-group input-group-sm">
+	<span popover="Aris T. Papageorghiou et al. International standards for early fetal size and pregnancy dating based on ultrasound measurement of crown–rump length in the first trimester of pregnancy. Ultrasound Obstet Gynecol 2014; 44: 641-648" popover-title="Referencia" popover-trigger="click" class="input-group-addon" id="sizing-addon2"><b>Longitud cefalo-caudal</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="crl" min=2 max=121
+	ng-change="set_crl()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_crl | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_crl | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_crl}}</span>
+		<span ng-if="!crl" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_crl<=10 || percentilPatologico_crl>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_crl>10 && percentilPatologico_crl<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_crl" type="{{type_crl}}" max="2.6">p{{percentilPatologico_crl | number : 0}}</progressbar>
+
+	 -->
+	
+<small><em> Percentil por fórmula propia Gregorio Marañón Peso:<br> (p{{percentilReferenciaV2 | number : 0}}) ({{pesoReferenciaV2 | number : 0}}gr) ({{zscoreReferenciaV2 | number : 3}}zs)</em></small>
+		<progressbar class="progress-striped active" value="zscoreReferenciaAbsV2" type="{{typeRefV2}}" max="2.6">p{{percentilReferenciaV2 | number : 0}}</progressbar>	
+	
+	
+<small><em>Percentil por fórmula propia Clinic Barcelona Peso:<br> (p{{percentilReferencia_clinicV2 | number : 0}}) ({{pesoReferencia_clinicV2 | number : 0}}gr) ({{zscoreReferencia_clinicV2 | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscoreReferenciaAbs_clinicV2" type="{{type_clinicV2}}" max="2.6">p{{percentilReferencia_clinicV2 | number : 0}}</progressbar>
+
+	
+	
+	<hr>	
+	
+	
+	
+		</div>
+		
+		
+		
+		
+		
+		</div>
+
+	
+<!-- <small><em>Percentil para variables de categorias distintas al valor de referencia (sexo, raza, patologias):<br> (p{{percentilPatologico | number : 0}}) ({{pesoPatologico | number : 0}}gr) ({{zscorePatologico | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs" type="{{type}}" max="2.6">p{{percentilPatologico | number : 0}}<i ng-show="showWarning"> Percentil de riesgo!</i></progressbar> -->
+
+	
+
+	<!-- 
+<small><em>Percentil por fórmula Lancet HUGH:<br> (p{{percentilReferencia | number : 0}}) ({{pesoReferencia | number : 0}}gr * (media / esperado)) ({{zscoreReferencia | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscoreReferenciaAbs" type="{{typeRef}}" max="2.6">p{{percentilReferencia | number : 0}}<i ng-show="showWarningRef"> Percentil de riesgo!</i></progressbar>
+	 -->
+
+	
+	
+			   
+		 <h4>Estudio Hemodinámico</h4>	
+					<div class="col-md-6">
+		
+
+		
+		<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Arteria Umbilical</b></span>
+	<input type="number" class="form-control" placeholder="IP"
+	name="validate-number" id="validate-number" 
+	step="0.1" ng-model="auip" min=0.4 max=2.5 
+	ng-change="set_au(); set_ratio();" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_au | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_au | number : 0}}</span>	
+		<span ng-if="!auip" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_au<=10 || percentilPatologico_au>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_au>10 && percentilPatologico_au<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<!-- 
+		<progressbar class="progress-striped active" value="zscorePatologicoAbs_au" type="{{type_au}}" max="2.6">p{{percentilPatologico_au | number : 0}} AU<i ng-show="showWarning_au"> Percentil de riesgo!</i></progressbar>	
+		<progressbar class="progress-striped active" value="zscorePatologicoAbs_au_gregorio" type="{{type_au_gregorio}}" max="2.6">p{{percentilPatologico_au_gregorio | number : 0}} AU</progressbar>	
+	 -->	
+		
+		<br>
+				<div class="input-group input-group-sm">	
+	<span class="input-group-addon" id="sizing-addon3"><b>Arteria Cerebral Media</b></span>
+	<input type="number" class="form-control" placeholder="IP" step="0.1" ng-model="acmip" min=0.5 max=3 ng-change="set_acm(); set_ratio();">	
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_acm | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_acm | number : 0}}</span>	
+		<span ng-if="!acmip" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_acm<=10 || percentilPatologico_acm>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_acm>10 && percentilPatologico_acm<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+<!-- 
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_acm" type="{{type_acm}}" max="2.6">p{{percentilPatologico_acm | number : 0}} ACM<i ng-show="showWarning_acm"> Percentil de riesgo!</i></progressbar>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_acm_gregorio" type="{{type_acm_gregorio}}" max="2.6">p{{percentilPatologico_acm_gregorio | number : 0}} ACM</progressbar>
+			
+	 -->	
+	<br>
+<div class="input-group input-group-sm">	
+	<span class="input-group-addon" id="sizing-addon3"><b>Ratio</b></span>
+<span class="form-control">{{ratio}}</span>
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_ratio | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_ratio | number : 0}}</span>	
+		<span ng-if="!ratio" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_ratio<=10 || percentilPatologico_ratio>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_ratio>10 && percentilPatologico_ratio<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+<!-- 
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_ratio" type="{{type_ratio}}" max="2.6">p{{percentilPatologico_ratio | number : 0}} ratio<i ng-show="showWarning_ratio"> Percentil de riesgo!</i></progressbar>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_ratio_gregorio" type="{{type_ratio_gregorio}}" max="2.6">p{{percentilPatologico_ratio_gregorio | number : 0}} ratio</progressbar>
+	 -->
+		
+		
+		</div>
+	
+<div class="col-md-6">
+
+
+	
+	<small><em>Percentil Clinic Barcelona Arteria Umbilical: (p{{percentilPatologico_au | number : 0}}) ({{zscorePatologico_au | number : 3}}zs)</em></small>
+		<progressbar class="progress-striped active" value="zscorePatologicoAbs_au" type="{{type_au}}" max="2.6">p{{percentilPatologico_au | number : 0}} AU</progressbar>	
+<small><em>Percentil por fórmula propia Gregorio Marañón Arteria Umbilical: (p{{percentilPatologico_au_gregorio | number : 0}}) ({{zscorePatologico_au_gregorio | number : 3}}zs)</em></small>
+		<progressbar class="progress-striped active" value="zscorePatologicoAbs_au_gregorio" type="{{type_au_gregorio}}" max="2.6">p{{percentilPatologico_au_gregorio | number : 0}} AU</progressbar>	
+
+
+	<hr>
+	
+	<small><em>Percentil Clinic Barcelona Arteria Cerebral Media: (p{{percentilPatologico_acm | number : 0}}) ({{zscorePatologico_acm | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_acm" type="{{type_acm}}" max="2.6">p{{percentilPatologico_acm | number : 0}} ACM</progressbar>
+<small><em>Percentil por fórmula propia Gregorio Marañón Arteria Cerebral Media: (p{{percentilPatologico_acm_gregorio | number : 0}}) ({{zscorePatologico_acm_gregorio | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_acm_gregorio" type="{{type_acm_gregorio}}" max="2.6">p{{percentilPatologico_acm_gregorio | number : 0}} ACM</progressbar>	
+	<hr>
+		
+		<small><em>Percentil por fórmula propia Gregorio Marañón Ratio cerebro-placentario: (p{{percentilPatologico_ratio | number : 0}}) ({{zscorePatologico_ratio | number : 3}}zs)</em></small>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_ratio" type="{{type_ratio}}" max="2.6">p{{percentilPatologico_ratio | number : 0}} ratio</progressbar>
+<!-- 	<progressbar class="progress-striped active" value="zscorePatologicoAbs_ratio_gregorio" type="{{type_ratio_gregorio}}" max="2.6">p{{percentilPatologico_ratio_gregorio | number : 0}} ratio</progressbar>
+ -->
+
+	</div>		
+		
+			
+			
+			
+			
+			
+	</div>
+	
+	
+	
+	
+
+	
+	
+
+	
+	
+	</div>
+
+
+
+
+	<div ng-hide="radioTabs!='huesos'">
+
+	
+    <h4>Estudio de Huesos Largos</h4>
+Edad gestacional en uso: {{gas}} semanas y {{gad | number : 0}} días.
+
+	 	<div class="row">
+		<div class="col-md-4">
+
+<!-- 		Lyn S. Chitty, Douglas G. Altman. Charts of fetal size: limb bones. BJOG: an International Journal of Obstetrics and Gynaecology 2002; 109: 919–929 -->
+		
+		
+		
+<!-- <p><label popover="Lyn S. Chitty, Douglas G. Altman. Charts of fetal size: limb bones. BJOG: an International Journal of Obstetrics and Gynaecology 2002; 109: 919–929" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Húmero: </label><input type="number" ng-model="hum" ng-init=0 min=10 max=70 ng-change="set_humero()">{{resultado_hum}}</p> -->
+
+
+
+
+
+
+					<div class="input-group input-group-sm">
+<span class="input-group-addon" id="sizing-addon3"><b>Húmero</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="hum" min=10 max=70
+	ng-change="set_humero()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_hum | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_hum | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_hum}}</span>
+		<span ng-if="!hum" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_hum<=10 || percentilPatologico_hum>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_hum>10 && percentilPatologico_hum<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_hum" type="{{type_hum}}" max="2.6">p{{percentilPatologico_hum | number : 0}}</progressbar>
+
+<!-- <p><label popover="Lyn S. Chitty, Douglas G. Altman. Charts of fetal size: limb bones. BJOG: an International Journal of Obstetrics and Gynaecology 2002; 109: 919–929" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Cúbito: </label><input type="number" ng-model="cub" ng-init=0 min=10 max=65 ng-change="set_cubito()">{{resultado_cub}}</p> -->
+
+
+
+
+	<div class="input-group input-group-sm">
+<span class="input-group-addon" id="sizing-addon3"><b>Cúbito</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="cub" min=10 max=65
+	ng-change="set_cubito()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_cub | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_cub | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_cub}}</span>
+		<span ng-if="!cub" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_cub<=10 || percentilPatologico_cub>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_cub>10 && percentilPatologico_cub<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_cub" type="{{type_cub}}" max="2.6">p{{percentilPatologico_cub | number : 0}}</progressbar>
+
+	
+	
+<!-- <p><label popover="Lyn S. Chitty, Douglas G. Altman. Charts of fetal size: limb bones. BJOG: an International Journal of Obstetrics and Gynaecology 2002; 109: 919–929" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Radio: </label><input type="number" ng-model="rad" ng-init=0 min=5 max=51 ng-change="set_radio()">{{resultado_rad}}</p> -->
+	
+	
+	<div class="input-group input-group-sm">
+<span class="input-group-addon" id="sizing-addon3"><b>Radio</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="rad" min=5 max=51
+	ng-change="set_radio()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_rad | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_rad | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_rad}}</span>
+		<span ng-if="!rad" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_rad<=10 || percentilPatologico_rad>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_rad>10 && percentilPatologico_rad<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_rad" type="{{type_rad}}" max="2.6">p{{percentilPatologico_rad | number : 0}}</progressbar>
+
+	
+			</div>
+		<div class="col-md-4">
+	
+<!-- <p><label popover="Lyn S. Chitty, Douglas G. Altman. Charts of fetal size: limb bones. BJOG: an International Journal of Obstetrics and Gynaecology 2002; 109: 919–929" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Fémur: </label><input type="number" ng-model="fem" ng-init=0 min=17 max=75 ng-change="set_femur()">{{resultado_fem}}</p> -->
+
+	<div class="input-group input-group-sm">
+<span class="input-group-addon" id="sizing-addon3"><b>Fémur</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="fem" min=17 max=75
+	ng-change="set_femur()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_fem | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_fem | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_fem}}</span>
+		<span ng-if="!fem" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_fem<=10 || percentilPatologico_fem>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_fem>10 && percentilPatologico_fem<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_fem" type="{{type_fem}}" max="2.6">p{{percentilPatologico_fem | number : 0}}</progressbar>
+
+	
+	
+	
+<!-- <p><label popover="Lyn S. Chitty, Douglas G. Altman. Charts of fetal size: limb bones. BJOG: an International Journal of Obstetrics and Gynaecology 2002; 109: 919–929" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Tibia: </label><input type="number" ng-model="tib" ng-init=0 min=10 max=70 ng-change="set_tibia()">{{resultado_tib}}</p> -->
+	
+	<div class="input-group input-group-sm">
+<span class="input-group-addon" id="sizing-addon3"><b>Tibia</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="tib" min=10 max=70
+	ng-change="set_tibia()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_tib | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_tib | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_tib}}</span>
+		<span ng-if="!tib" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_tib<=10 || percentilPatologico_tib>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_tib>10 && percentilPatologico_tib<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_tib" type="{{type_tib}}" max="2.6">p{{percentilPatologico_tib | number : 0}}</progressbar>
+
+	
+	
+<!-- <p><label popover="Lyn S. Chitty, Douglas G. Altman. Charts of fetal size: limb bones. BJOG: an International Journal of Obstetrics and Gynaecology 2002; 109: 919–929" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Peroné: </label><input type="number" ng-model="per" ng-init=0 min=6 max=63 ng-change="set_perone()">{{resultado_per}}</p> -->
+	
+	
+	<div class="input-group input-group-sm">
+<span class="input-group-addon" id="sizing-addon3"><b>Peroné</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="per" min=6 max=63
+	ng-change="set_perone()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_per | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_per | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_per}}</span>
+		<span ng-if="!per" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_per<=10 || percentilPatologico_per>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_per>10 && percentilPatologico_per<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_per" type="{{type_per}}" max="2.6">p{{percentilPatologico_per | number : 0}}</progressbar>
+
+			</div>
+
+
+
+
+		<div class="col-md-4">
+	
+
+			
+	
+	
+<!-- <p><label popover="Lyn S. Chitty, Douglas G. Altman. Charts of fetal size: limb bones. BJOG: an International Journal of Obstetrics and Gynaecology 2002; 109: 919–929" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Pie: </label><input type="number" ng-model="pie" ng-init=0 min=2 max=121 ng-change="set_pie()">{{resultado_pie}}</p> -->
+	
+	
+	<div class="input-group input-group-sm">
+<span class="input-group-addon" id="sizing-addon3"><b>Pie</b></span>
+	<input type="number" class="form-control" placeholder="mm."
+	ng-model="pie" min=2 max=121
+	ng-change="set_pie()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_pie | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_pie | number : 0}}</span>	
+		<span class="input-group-addon" id="sizing-addon3">{{resultado_pie}}</span>
+		<span ng-if="!pie" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_pie<=10 || percentilPatologico_pie>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_pie>10 && percentilPatologico_pie<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_pie" type="{{type_pie}}" max="2.6">p{{percentilPatologico_pie | number : 0}}</progressbar>
+
+			</div>
+			</div>
+
+	
+
+
+	</div>
+ 
+	<!-- Aqui terminan
+	 -->
+	
+	<div ng-hide="radioTabs!='hemodinamico'">
+
+     <h4>Estudio Hemodinámico</h4>
+Edad gestacional en uso: {{gas}} semanas y {{gad | number : 0}} días.
+
+
+	 	<div class="row">
+		<div class="col-md-4">
+
+		
+		
+		
+<!-- <p><label popover="Pepe et al. Bla bla 20. 23-290" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Arteria umbilical (IP): </label><input type="number" class="form-control" step="0.1" ng-model="auip" ng-init=0 min=0.4 max=2.5 ng-change="set_au(); set_ratio();">Percentil: {{resultado_au}}</p>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_au" type="{{type_au}}" max="2.6">p{{percentilPatologico_au | number : 0}}<i ng-show="showWarning_au"> Percentil de riesgo!</i></progressbar>
+	 -->
+	
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Arteria Umbilical</b></span>
+	<input type="number" class="form-control" placeholder="IP"
+	name="validate-number" id="validate-number" 
+	step="0.1" ng-model="auip" min=0.4 max=2.5 
+	ng-change="set_au(); set_ratio();" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_au | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_au | number : 0}}</span>	
+		<span ng-if="!auip" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_au<=10 || percentilPatologico_au>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_au>10 && percentilPatologico_au<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+		<progressbar class="progress-striped active" value="zscorePatologicoAbs_au" type="{{type_au}}" max="2.6">p{{percentilPatologico_au | number : 0}}</progressbar>	
+
+				
+	<div class="input-group input-group-sm">	
+	<span class="input-group-addon" id="sizing-addon3"><b>Arteria Cerebral Media</b></span>
+	<input type="number" class="form-control" placeholder="IP" step="0.1" ng-model="acmip" min=0.5 max=3 ng-change="set_acm(); set_ratio();">	
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_acm | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_acm | number : 0}}</span>	
+		<span ng-if="!acmip" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_acm<=10 || percentilPatologico_acm>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_acm>10 && percentilPatologico_acm<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_acm" type="{{type_acm}}" max="2.6">p{{percentilPatologico_acm | number : 0}}</progressbar>
+
+	
+	
+<div class="input-group input-group-sm">	
+	<span class="input-group-addon" id="sizing-addon3"><b>Ratio</b></span>
+<span class="form-control">{{ratio}}</span>
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_ratio | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_ratio | number : 0}}</span>	
+		<span ng-if="!ratio" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_ratio<=10 || percentilPatologico_ratio>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_ratio>10 && percentilPatologico_ratio<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_ratio" type="{{type_ratio}}" max="2.6">p{{percentilPatologico_ratio | number : 0}}</progressbar>
+
+		</div>
+		<div class="col-md-4">
+	
+<!-- <p><label popover="Pepe et al. Bla bla 20. 23-290" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Velocidad de pico sistólico de Arteria Cerebral Media: </label><input type="number" class="form-control" ng-model="mcapsv" ng-init=0 ng-change="set_velocidad_mca()"></p>{{resultado_mcapsv}}
+ -->	
+	<div class="input-group input-group-sm">
+	<span class="input-group-addon" id="sizing-addon3"><b>Pico sistólico ACM</b></span>
+	<input type="number" class="form-control" placeholder="IP"
+	name="validate-number" id="validate-number" 
+	step="0.1" ng-model="mcapsv" min=0 max=100 
+	ng-change="set_velocidad_mca()" aria-describedby="sizing-addon3">
+	<span class="input-group-addon" id="sizing-addon3">{{mcaVelocidadEsperada | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">MoM {{mcaMOM | number : 2}}</span>	
+		<span ng-if="!mcapsv" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(mom_anemia>1.3)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_au<=1.3)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="mom_anemia" type="{{type_anemia}}" max="2">MoM {{mom_anemia}}<i ng-show="showWarning_anemia">{{tipoAnemia}}</i></progressbar>
+
+<!-- <p><label popover="Pepe et al. Bla bla 20. 23-290" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Arteria uterina derecha (IP): </label><input type="number" class="form-control" step="0.1" ng-model="audip" ng-init=0 min=0 max=3 ng-change="set_uterinas()"></p>
+ -->
+
+<!--  <p><label popover="Pepe et al. Bla bla 20. 23-290" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Arteria uterina izquierda (IP):: </label><input type="number" class="form-control" step="0.1" ng-model="auiip" ng-init=0 min=0 max=3 ng-change="set_uterinas()"></p> -->
+ 
+	<div class="input-group input-group-sm">	
+	<span class="input-group-addon" id="sizing-addon3"><b>Arterias uterinas izq-der</b></span>
+	<input type="number" class="form-control" placeholder="IP" step="0.1" ng-model="audip" min=0 max=3 ng-change="set_uterinas()">	
+	<input type="number" class="form-control" placeholder="IP" step="0.1" ng-model="auiip" min=0 max=3 ng-change="set_uterinas()">		
+		<span ng-if="!(audip && auiip)" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+	</div>
+<br>
+
+
+
+
+<!-- <p><label popover="Pepe et al. Bla bla 20. 23-290" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Media de arterias uterinas </label>{{(audip + auiip) / 2 | number : 2}}. Percentil: {{resultado_uterinas}}</p> -->
+
+<div class="input-group input-group-sm">	
+	<span class="input-group-addon" id="sizing-addon3"><b>Media uterinas</b></span>
+<span class="form-control">Media: {{(audip + auiip) / 2 | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_uterinas | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_uterinas | number : 0}}</span>	
+		<span ng-if="!(audip && auiip)" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_uterinas<=10 || percentilPatologico_uterinas>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_uterinas>10 && percentilPatologico_uterinas<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_uterinas" type="{{type_uterinas}}" max="2.6">p{{percentilPatologico_uterinas | number : 0}}</progressbar>
+
+			</div>
+		<div class="col-md-4">
+	
+<!-- <p><label popover="Pepe et al. Bla bla 20. 23-290" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Ductus venoso (IP): </label><input type="number" class="form-control" step="0.1" ng-model="dvip" ng-init=0 min=0.2 max=1.5 ng-change="set_dv()">Percentil: {{resultado_dv}}</p> -->
+	
+		<div class="input-group input-group-sm">	
+	<span class="input-group-addon" id="sizing-addon3"><b>Ductus venoso</b></span>
+	<input type="number" class="form-control" placeholder="IP" step="0.1" ng-model="dvip" min=0.2 max=1.5 ng-change="set_dv()">	
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_dv | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_dv | number : 0}}</span>	
+		<span ng-if="!dvip" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_dv<=10 || percentilPatologico_dv>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_dv>10 && percentilPatologico_dv<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_dv" type="{{type_dv}}" max="2.6">p{{percentilPatologico_dv | number : 0}}</progressbar>
+
+	
+<!-- <p><label popover="Pepe et al. Bla bla 20. 23-290" popover-title="Referencia" popover-trigger="click" class="btn btn-default">Istmo aórtico (IP): </label><input type="number" class="form-control" step="0.1" ng-model="iaip" ng-init=0 min=0.5 max=3 ng-change="set_ia()">Percentil: {{resultado_ia}}</p> -->
+
+	<div class="input-group input-group-sm">	
+	<span class="input-group-addon" id="sizing-addon3"><b>Istmo aórtico</b></span>
+	<input type="number" class="form-control" placeholder="IP" step="0.1" ng-model="iaip" min=0.5 max=3 ng-change="set_ia()">	
+	<span class="input-group-addon" id="sizing-addon3">z{{zscorePatologico_ia | number : 2}}</span>
+	<span class="input-group-addon" id="sizing-addon3">p{{percentilPatologico_ia | number : 0}}</span>	
+		<span ng-if="!iaip" class="input-group-addon warning"><span class="glyphicon glyphicon-alert"></span></span>
+		<span ng-if="(percentilPatologico_ia<=10 || percentilPatologico_ia>=90)" class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+		<span ng-if="(percentilPatologico_ia>10 && percentilPatologico_ia<90)" class="input-group-addon success"><span class="glyphicon glyphicon-ok"></span></span>
+	</div>
+	<progressbar class="progress-striped active" value="zscorePatologicoAbs_ia" type="{{type_ia}}" max="2.6">p{{percentilPatologico_ia | number : 0}}</progressbar>
+
+	</div>
+	</div>
+
+	
+	
+<div class="row">
+		<div class="col-md-6">
+					<div id="containerHemodinamico" style="height: 600px"></div>
+	
+
+
+	 	</div>
+</div>
+	
+	
+	
+	</div>	
+
+
+
+	<!-- 
+aqui empieza la calculadora de riesgo de preeclampsia autor: Bryan Duque Gutierrez
+ -->
+ <div ng-hide="radioTabs!='riesgoPreeclampsia'">
+	<script src="ValldHebronCalculadora.js"></script>
+	
+
+	
+    Edad gestacional en uso: {{gas}} semanas y {{gad | number : 0}} días.
+
+	<div class="row">
+		<h4>Variables comunes para los modelos Vall d'Hebron y FMF</h4>
+		<div class="col-md-3">
+			<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="sizing-addon3"><b>Peso</b></span>
+					<input type="number" class="form-control" placeholder="kg" id="pes">	
+			</div>
+		</div>
+		
+		<div class="col-md-3">
+			<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="sizing-addon3"><b>Presión arterial sistólica</b></span>
+					<input type="number" class="form-control" placeholder="mmHg" id="tas">	
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="input-group input-group-sm">
+					<span class="input-group-addon" id="sizing-addon3"><b>Presión arterial diastólica</b></span>
+					<input type="number" class="form-control" placeholder="mmHg" id="tad">	
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="input-group input-group-sm">
+				<span class="input-group-addon" id="sizing-addon3"><b>PAPP-A</b></span>
+				<input type="number" class="form-control" placeholder="PAPP-A, MoM" id="pappam">
+			</div>
+		</div>
+	</div>
+	
+
+	<div class="modal-body row">
+		<div class="col-md-4 text-center" style="background: rgb(174, 200, 176);">
+			<h4>Modelo del hospital Vall d'Hebron</h4>
+			<h4>Parámetros sanguíneos</h4>
+
+				<div class="input-group input-group-sm">	
+					<span class="input-group-addon" id="sizing-addon3"><b>PAPP-A</b></span>
+					<input type="number" class="form-control" placeholder="PAPP-A, mU/L" id="pappa">	
+					</div>
+					<br>
+
+				<div class="input-group input-group-sm">	
+					<span class="input-group-addon" id="sizing-addon3"><b>PIGF</b></span>
+					<input type="number" class="form-control" placeholder="PIGF, pg/mL" id="plgf">	
+					</div>
+					<br>
+
+					
+				
+				<div class="input-group input-group-sm">	
+						<span class="input-group-addon" id="sizing-addon3"><b>PIGF, MoM</b></span>
+						<input type="number" class="form-control" placeholder="PIGF, MoM" id="plgfm">	
+						</div>
+						<br>
+
+				<div class="input-group input-group-sm">	
+							<span class="input-group-addon" id="sizing-addon3"><b>Semanas</b></span>
+							<input type="number" class="form-control" placeholder="cuando se hicieron los análisis (solo añadir en caso de no elegir MoM)" id="weeks1">	
+							</div>
+							<br>
+
+				<div class="input-group input-group-sm">	
+								<span class="input-group-addon" id="sizing-addon3"><b>Días</b></span>
+								<input type="number" class="form-control" placeholder="cuando se hicieron los análisis (solo añadir en caso de no elegir MoM)" id="days1">	
+								</div>
+								<br>
+
+			<h4>Presión Arterial</h4>
+			
+
+				<div class="input-group input-group-sm">	
+					<span class="input-group-addon" id="sizing-addon3"><b>Presión arterial, MoM</b></span>
+					<input type="number" class="form-control" placeholder="MAP, MoM" id="mapm">	
+					</div>
+					<br>
+
+				
+							<div class="input-group input-group-sm">	
+								<span class="input-group-addon" id="sizing-addon3"><b>Media de la presión arterial</b></span>
+								<input type="number" class="form-control" placeholder="Media" id="map">	
+								</div>
+								<br>
+							
+
+			<h4>Doppler Arterias Uterinas</h4>
+
+							<div class="form-check form-check-inline h6 mb-3 ">
+								<input class="form-check-input" type="radio" name="inlineRadioOptionsv"
+									id="inlineRadio1v" value="option1">
+								<label class="form-check-label" for="inlineRadio1v">Transvaginal</label>
+							</div>
+							<div class="form-check form-check-inline h6 mb-3 left">
+								<input class="form-check-input" type="radio" name="inlineRadioOptionsv"
+									id="inlineRadio2v" value="option2" checked>
+								<label class="form-check-label" for="inlineRadio2v">Transabdominal</label>
+							</div>
+
+							<div class="input-group input-group-sm">	
+								<span class="input-group-addon" id="sizing-addon3"><b>Uterina PI, MoM</b></span>
+								<input type="number" class="form-control" placeholder="Uterina PI, MoM" id="meanutm">	
+								</div>
+								<br>
+
+							<div class="input-group input-group-sm ">	
+									<span class="input-group-addon" id="sizing-addon3"><b>Uterina Izquierda PI</b></span>
+									<input type="number" class="form-control" placeholder="Izquierda" id="esquerra">	
+									</div>
+									<br>
+								
+							<div class="input-group input-group-sm">	
+										<span class="input-group-addon" id="sizing-addon3"><b>Uterina Derecha PI</b></span>
+										<input type="number" class="form-control" placeholder="Derecha" id="dreta">	
+										</div>
+										<br>
+
+							<div class="input-group input-group-sm">	
+										<span class="input-group-addon" id="sizing-addon3"><b>Media Uterina PI</b></span>
+										<input type="number" class="form-control" placeholder="(No escribir, se calcula automátocamente)" id="meanut">	
+										</div>
+										<br>
+
+	
+							<div class="input-group input-group-sm">	
+										<span class="input-group-addon" id="sizing-addon3"><b>Semanas</b></span>
+										<input type="number" class="form-control" placeholder="cuando se hicieron los análisis (solo añadir en caso de no elegir MoM)" id="weeks2">	
+							</div>
+							<br>
+						
+							<div class="input-group input-group-sm">	
+								<span class="input-group-addon" id="sizing-addon3"><b>Días</b></span>
+								<input type="number" class="form-control" placeholder="cuando se hicieron los análisis (solo añadir en caso de no elegir MoM)" id="days2">	
+							</div>
+							<br>
+
+							<h4>Características Maternas</h4>
+							<div class="input-group input-group-sm">	
+								<span class="input-group-addon" id="sizing-addon3"><b>Peso</b></span>
+								<input type="number" class="form-control" placeholder="Kg" id="pes">	
+							</div>
+							<br>
+
+							<div class="input-group input-group-sm">	
+								<span class="input-group-addon" id="sizing-addon2"><b>Etnia</b></span>
+								<select class="form-control" id="etnia">
+									<option value="none" selected disabled hidden>Seleccionar etnia</option>
+									<option value="afro">Negra</option>
+									<option value="magreb">Magrebí</option>
+									<option value="white">Blanca</option>
+									<option value="yellow">Asiática</option>
+								</select>
+							</div>
+							<br>
+							
+
+							<div class="row justify-content-between mx-0">
+								<h4>Marcar según corresponda:</h4>
+								<h4>Sí / No</h4>
+							</div>
+							<div class="row justify-content-between mx-0">
+								<label class="form-check-label" for="nulli">Nulípara</label>
+								<div class="form-check form-check-inline mx-0">
+									<input class="form-check-input mr-3" type="radio" name="nulli" id="nulliparous">
+									<input class="form-check-input" type="radio" name="nulli" checked>
+								</div>
+							</div>
+							<div class="row justify-content-between mx-0">
+								<label class="form-check-label" for="old">Tiene más de 40 años</label>
+								<div class="form-check form-check-inline mx-0">
+									<input class="form-check-input mr-3" type="radio" name="old" id="old">
+									<input class="form-check-input" type="radio" name="old" checked>
+								</div>
+							</div>
+							<div class="row justify-content-between mx-0">
+								<label class="form-check-label" for="previa">Preeclampsia previa</label>
+								<div class="form-check form-check-inline mx-0">
+									<input class="form-check-input mr-3" type="radio" name="previa" id="previa">
+									<input class="form-check-input" type="radio" name="previa" checked>
+								</div>
+							</div>
+							<div class="row justify-content-between mx-0">
+								<label class="form-check-label" for="hta">Hipertensión crónica</label>
+								<div class="form-check form-check-inline mx-0">
+									<input class="form-check-input mr-3" type="radio" name="hta" id="hta">
+									<input class="form-check-input" type="radio" name="hta" checked>
+								</div>
+							</div>
+							<div class="row justify-content-between mx-0">
+								<label class="form-check-label" for="smoker">Fumadora</label>
+								<div class="form-check form-check-inline mx-0">
+									<input class="form-check-input mr-3" type="radio" name="smoker" id="smoker">
+									<input class="form-check-input" type="radio" name="smoker" checked>
+								</div>
+							</div>
+							<div class="row justify-content-between mx-0">
+								<label class="form-check-label" for="diabetes">Diabetes</label>
+								<div class="form-check form-check-inline mx-0">
+									<input class="form-check-input mr-3" type="radio" name="diabetes" id="diabetes">
+									<input class="form-check-input" type="radio" name="diabetes" checked>
+								</div>
+							</div>
+							<div class="row justify-content-between mx-0">
+								<label class="form-check-label" for="hormones">ART con estimulación hormonal</label>
+								<div class="form-check form-check-inline mx-0">
+									<input class="form-check-input mr-3" type="radio" name="hormones" id="hormones">
+									<input class="form-check-input" type="radio" name="hormones" checked>
+								</div>
+								
+				<h4>Resultado: </h4>
+				<div class="row justify-content-between mx-0">
+					<div>
+
+				<h4 id="risk_tx"></h4>
+				<h4 id="riskcut_tx"></h4>
+				<h6 id="suggest_tx"></h6>
+					</div>
+				
+				<button class="btn btn-primary btn-lg" type="button" onclick="riscPE()">Calcular</button>
+			<br>
+	
+						</div>
+				</div>
+		</div>
+
+
+		<div class="col-md-4 text-center" style="background: rgb(191, 174, 200);" class="rounded">
+
+					<h4>Modelo de la Fetal Medicine Foundation</h4>
+		
+					<h4>Parámetros biometricos</h4>
+					
+					<div class="input-group input-group-sm">	
+						<span class="input-group-addon" id="sizing-addon3"><b>Edad</b></span>
+						<input type="number" class="form-control" placeholder="años" id="RP_EDAD">	
+						</div>
+						<br>
+
+						<div class="input-group input-group-sm">	
+							<span class="input-group-addon" id="sizing-addon3"><b>Altura</b></span>
+							<input type="number" class="form-control" placeholder="cm" id="RP_Altura">	
+							</div>
+							<br>
+
+							
+
+								<h4>Parámetros del primer trimestre</h4>
+								<div class="input-group input-group-sm">	
+									<span class="input-group-addon" id="sizing-addon3"><b>CRL</b></span>
+									<input type="number" class="form-control" placeholder="mm" id="RP_CRL">	
+									</div>
+									<br>
+
+
+											<div class="input-group input-group-sm">	
+												<span class="input-group-addon" id="sizing-addon3"><b>IPmAUta</b></span>
+												<input type="number" class="form-control" placeholder="mmHg" id="RP_IP_mAUt">	
+												</div>
+												<br>
+
+												
+												<div class="row justify-content-between mx-0">
+													<h4>Parámetros previos</h4>
+												</div>
+
+												<div class="input-group input-group-sm">	
+													<span class="input-group-addon" id="sizing-addon2"><b>Paridad</b></span>
+													<select class="form-control" id="select_paridad">
+														<option value="0">Nulípra</option>
+														<option value="1">Multípara</option>
+													</select>
+												</div>
+												<br>
+												
+												<div class="input-group input-group-sm">	
+													<span class="input-group-addon" id="sizing-addon2"><b>Preeclampsia previa</b></span>
+													<select class="form-control" id="select_PEprevia">
+														<option value="0">No</option>
+														<option value="1">Sí</option>
+													</select>
+												</div>
+												<br>
+
+												<div class="input-group input-group-sm">	
+													<span class="input-group-addon" id="sizing-addon2"><b>Hipertensión</b></span>
+													<select class="form-control" id="select_hipertension">
+														<option value="0">No</option>
+														<option value="1">Sí</option>
+													</select>
+												</div>
+												<br>
+
+												<div class="input-group input-group-sm">	
+													<span class="input-group-addon" id="sizing-addon2"><b>Diabetes</b></span>
+													<select class="form-control" id="select_diabetes">
+														<option value="0">No</option>
+														<option value="1">Sí</option>
+													</select>
+												</div>
+												<br>
+
+
+												<div class="input-group input-group-sm">	
+													<span class="input-group-addon" id="sizing-addon2"><b>Enfermedad renal</b></span>
+													<select class="form-control" id="select_enf_renal">
+														<option value="0">No</option>
+														<option value="1">Sí</option>
+													</select>
+												</div>
+												<br>
+
+												<div class="input-group input-group-sm">	
+													<span class="input-group-addon" id="sizing-addon2"><b>Coagulopatía</b></span>
+													<select class="form-control" id="select_coagulopatia">
+														<option value="0">No</option>
+														<option value="1">Sí</option>
+													</select>
+												</div>
+												<br>
+
+												<div class="input-group input-group-sm">	
+													<span class="input-group-addon" id="sizing-addon2"><b>Etnia</b></span>
+													<select class="form-control" id="select_etnia">
+														<option value="none" selected disabled hidden>Seleccionar etnia</option>
+														<option value="0">Europea</option>
+														<option value="0">Magrebí</option>
+														<option value="1">Sudamericana</option>
+														<option value="0">Asiática</option>
+														<option value="0">Otra</option>
+													</select>
+												</div>
+												<br>
+
+			
+												<h4>Resultado: </h4>
+												<h4 id="riskFMF"></h4>
+												<h4 id="resultadoFMF"></h4>
+												
+												<script src="FMFcalcualdora.js"></script>
+												<br>
+												<button class="btn btn-primary  btn-lg" type="button" onclick="gestacional_riesgo_preeclampsia_I_TM()" value="Calculate">Calcular</button>
+			
+
+		</div>
+		
+
+		<div class="col-md-4 text-center" style="background: rgb(174, 188, 200);" class="rounded">
+
+         <h4>Modelo miniPIERS</h4>
+
+
+			<div class="input-group input-group-sm">	
+				<span class="input-group-addon" id="sizing-addon3"><b>Presión</b></span>
+				<input type="number" class="form-control" placeholder="mmHg" id="presion">	
+				</div>
+				<br>
+
+				
+				<div class="input-group input-group-sm">	
+					<span class="input-group-addon" id="sizing-addon3"><b>Embarazos previos de 20 semanas </b></span>
+					<select class="form-control" id="multiple">
+						<option value="No">No</option>
+						<option value="Sí">Sí</option>
+					</select>
+				</div>
+				<br>
+
+			
+			<div class="input-group input-group-sm">	
+				<span class="input-group-addon" id="sizing-addon3"><b>Dolor de cabeza crónico y/o problemas visuales</b></span>
+				<select class="form-control" id="dolor">
+					<option value="No">No</option>
+					<option value="Sí">Sí</option>
+				</select>
+			</div>
+			<br>
+
+			
+			<div class="input-group input-group-sm">	
+				<span class="input-group-addon" id="sizing-addon3"><b>Sangrado vaginal</b></span>
+				<select class="form-control" id="sangrado">
+					<option value="No">No</option>
+					<option value="Sí">Sí</option>
+					
+				</select>
+			</div>
+			<br>
+			<div class="input-group input-group-sm">	
+				<span class="input-group-addon" id="sizing-addon3"><b>Dolor en el pecho</b></span>
+				<select class="form-control" id="pecho">
+					<option value="No">No</option>
+					<option value="Sí">Sí</option>
+				</select>
+			</div>
+			<br>
+
+			<div class="input-group input-group-sm">	
+				<span class="input-group-addon" id="sizing-addon3"><b>Niveles de proteína en la orina</b></span>
+				<select class="form-control" id="nivelProteina">
+					<option value="none" selected disabled hidden></option>
+					<option value="2">1 - No se han encontrado proteínas en la orina</option>
+					<option value="2">2 - 100 mg/dL de proteína en la orina</option>
+					<option value="3">3 - 300 mg/dL de proteína en la orina</option>
+					<option value="4">4 - 1000 mg/dL de proteína en la orina</option>
+				</select>
+			</div>
+		<br>
+
+					<h4>Resultado: </h4>
+					<h4 id="riskminiPIERS"></h4>
+					<h4 id="resultado"></h4>
+					<script src="miniPIERS.js"></script>
+				
+					<button class="btn btn-primary  btn-lg" type="button" onclick="miniPIERS()">Calcular</button>
+		<br>
+		<br>
+
+		<h4>Modelo FullPIERS</h4>
+		
+			<div class="input-group input-group-sm">	
+				<span class="input-group-addon" id="sizing-addon3"><b>Oxígeno</b></span>
+				<input type="number" class="form-control" placeholder="si no se sabe usar 97%" id="oxigeno">	
+				</div>
+				<br>	
+				
+				<div class="input-group input-group-sm">	
+					<span class="input-group-addon" id="sizing-addon3"><b>Plaquetas</b></span>
+					<input type="number" class="form-control" placeholder="x10^9/L" id="plaquetas">	
+					</div>
+					<br>	
+
+					<div class="input-group input-group-sm">	
+						<span class="input-group-addon" id="sizing-addon3"><b>Creatinina</b></span>
+						<input type="number" class="form-control" placeholder="mm Hg" id="creatinina">	
+						</div>
+						<br>	
+
+						<div class="input-group input-group-sm">	
+							<span class="input-group-addon" id="sizing-addon3"><b>AST/ALT </b></span>
+							<input type="number" class="form-control" placeholder="(U/L)" id="AST">	
+							</div>
+							<br>	
+
+							<div class="input-group input-group-sm">	
+								<span class="input-group-addon" id="sizing-addon3"><b>Dolor en el pecho o disnea</b></span>
+								<select class="form-control" id="disnea">
+									<option value="No">No</option>
+									<option value="Sí">Sí</option>
+								</select>
+							</div>
+							
+							<h4>Resultado: </h4>
+							<h4 id="riskFullPIERS"></h4>
+					<h4 id="resultadoFullPIERS"></h4>
+					<script src="fullPIERS.js"></script>
+				
+					<button class="btn btn-primary  btn-lg" type="button" onclick="fullPIERS()">Calcular</button>
+
+			
+
+		</div>
+	  </div>
+
+	
+
+
+	
+
+		
+ </div>		
+	<!-- 
+aqui termina la calculadora de riesgo de preeclampsia autor: Bryan Duque Gutierrez
+ -->
+
+	
+		<div ng-hide="radioTabs!='referencias'">
+		<div class="well well-lg">
+			<h4>Referencias</h4>
+						
+						<!-- 
+
+
+						-->
+						
+						
+					<a href="http://onlinelibrary.wiley.com/doi/10.1002/uog.13448/pdf" target="_blank"> CRL Ultrasound Obstet Gynecol 2014; 44: 641-648</a><br>
+					
+					<a href="https://intergrowth21.tghn.org/site_media/media/articles/fetalgrowth.pdf" target="_blank"> Biometrias Lancet
+ 2014; 384: 869–79</a><br>
+						
+					<a href="http://www.isuog.org/NR/rdonlyres/8FB3F18E-7A68-4DC4-809F-AFD9E49B262F/0/ChittyandAltmanBJOG2002.pdf" target="_blank"> Huesos largos BJOG 109; 919–929</a><br>
+					
+					<a href="http://onlinelibrary.wiley.com/doi/10.1046/j.1469-0705.1994.04050381.x/pdf" target="_blank"> Ductus Venoso UOG 4 1994 381-390</a><br>
+					
+					<a href="http://onlinelibrary.wiley.com/doi/10.1046/j.1469-0705.1996.07060401.x/pdf" target="_blank"> Rizzo UOG 7 1996 401-410</a><br>
+					
+					<a href="http://onlinelibrary.wiley.com/doi/10.1002/uog.20/pdf" target="_blank"> Ratio cerebroplacentario UOG 2003 21 124-127</a><br>
+					
+				
+					
+					
+					
+		</div>
+	</div>
+
+	
+	
+	
+	
+	
+	
+	
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- 
+<hr>
+	    <h4>Prueba charts</h4>
+		
+<div class="ct-chart ct-golden-section" id="chart1"></div>
+<div class="ct-chart ct-golden-section" id="chart2"></div>
+
+<script>
+  // Initialize a Line chart in the container with the ID chart1
+  new Chartist.Line('#chart1', {
+    labels: [1, 2, 3, 4],
+    series: [[100, 120, 180, 200]]
+  });
+
+  // Initialize a Line chart in the container with the ID chart2
+  new Chartist.Bar('#chart2', {
+    labels: [1, 2, 3, 4],
+    series: [[5, 2, 8, 3]]
+  });
+  
+  
+  
+</script> 
+-->
+
+		</div>
+
+		</div>
+		
+		
+</div>
+</body>
+</html>

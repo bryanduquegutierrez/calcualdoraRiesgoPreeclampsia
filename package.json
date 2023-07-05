@@ -1,0 +1,10 @@
+{
+"name": "Proyecto",
+"main": "./WEB/webapp.html",
+"single-instance": false,
+"window": {
+	"title": "Calculadora Fetal",
+    "toolbar": false,
+    "frame": true
+  }
+}
