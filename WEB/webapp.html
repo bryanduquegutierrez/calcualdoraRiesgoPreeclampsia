@@ -2017,33 +2017,43 @@ Calculadora de riesgo de preeclampsia autor: Bryan Duque Gutierrez
 
 	<div class="row">
 		<h4>Variables comunes para los modelos Vall d'Hebron y FMF</h4>
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<div class="input-group input-group-sm">
 					<span class="input-group-addon" id="sizing-addon3"><b>Peso</b></span>
 					<input type="number" class="form-control" placeholder="kg" id="pes">	
 			</div>
 		</div>
 		
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<div class="input-group input-group-sm">
-					<span class="input-group-addon" id="sizing-addon3"><b>Presión arterial sistólica</b></span>
+					<span class="input-group-addon" id="sizing-addon3"><b>Presión sistólica</b></span>
 					<input type="number" class="form-control" placeholder="mmHg" id="tas">	
 			</div>
 		</div>
-		<div class="col-md-3">
+		
+		<div class="col-md-2">
 			<div class="input-group input-group-sm">
-					<span class="input-group-addon" id="sizing-addon3"><b>Presión arterial diastólica</b></span>
+					<span class="input-group-addon" id="sizing-addon3"><b>Presión diastólica</b></span>
 					<input type="number" class="form-control" placeholder="mmHg" id="tad">	
 			</div>
 		</div>
-		<div class="col-md-3">
+
+		<div class="col-md-2">
 			<div class="input-group input-group-sm">
 				<span class="input-group-addon" id="sizing-addon3"><b>PAPP-A</b></span>
 				<input type="number" class="form-control" placeholder="PAPP-A, MoM" id="pappam">
 			</div>
 		</div>
+
+		<div class="col-md-2">
+			<div class="input-group input-group-sm">	
+				<span class="input-group-addon" id="sizing-addon3"><b>Uterina PI</b></span>
+				<input type="number" class="form-control" placeholder="Uterina PI, MoM" id="meanutm">	
+				</div>
 	</div>
 	
+	</div>
+		<br>
 
 	<div class="modal-body row">
 		<div class="col-md-4 text-center" style="background: rgb(174, 200, 176);">
@@ -2150,11 +2160,7 @@ Calculadora de riesgo de preeclampsia autor: Bryan Duque Gutierrez
 							<br>
 
 							<h4>Características Maternas</h4>
-							<div class="input-group input-group-sm">	
-								<span class="input-group-addon" id="sizing-addon3"><b>Peso</b></span>
-								<input type="number" class="form-control" placeholder="Kg" id="pes">	
-							</div>
-							<br>
+							
 
 							<div class="input-group input-group-sm">	
 								<span class="input-group-addon" id="sizing-addon2"><b>Etnia</b></span>
@@ -2346,13 +2352,10 @@ Calculadora de riesgo de preeclampsia autor: Bryan Duque Gutierrez
 												</div>
 												<br>
 
-			
+												<script src="FMFcalcualdora.js"></script>
 												<h4>Resultado: </h4>
 												<h4 id="riskFMF"></h4>
 												<h4 id="resultadoFMF"></h4>
-												
-												<script src="FMFcalcualdora.js"></script>
-												<br>
 												<button class="btn btn-primary  btn-lg" type="button" onclick="gestacional_riesgo_preeclampsia_I_TM()" value="Calculate">Calcular</button>
 			
 
@@ -2419,7 +2422,7 @@ Calculadora de riesgo de preeclampsia autor: Bryan Duque Gutierrez
 					<option value="4">4 - 1000 mg/dL de proteína en la orina</option>
 				</select>
 			</div>
-		<br>
+	
 
 					<h4>Resultado: </h4>
 					<h4 id="riskminiPIERS"></h4>

@@ -14,7 +14,7 @@ function gestacional_riesgo_preeclampsia_I_TM() {
     let m = document.getElementById("pappam").value;
     let p = document.getElementById("tas").value;
     let c = document.getElementById("tad").value;
-    let _ = document.getElementById("RP_IP_mAUt").value;
+    let _ = document.getElementById("meanutm").value;
     
     if (12 > i || i > 55 || "" == i)
         alert("Edad fuera de rango");

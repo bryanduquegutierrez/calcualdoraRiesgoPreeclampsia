@@ -6,12 +6,13 @@
     "configurations": [
 
 
+
     
         {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "file": "/Users/bryan/Desktop/TFG/Calculadora Fetal archivos copy/WEB/webapp.html"
+            "file": "/Users/bryan/Desktop/TFG/Calculadora/WEB/webapp.html"
             
         }
     ]
